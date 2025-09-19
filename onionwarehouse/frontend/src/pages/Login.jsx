@@ -15,7 +15,7 @@ export default function Login() {
   return (
     <div
       className="flex justify-end items-center h-[100vh] pr-10 bg-cover bg-center"
-      style={{ backgroundImage: "url('/images/login.jpg')" }}
+      style={{ backgroundImage: "url('/images/login2.jpeg')" }}
     >
       <form
         className="bg-white bg-opacity-90 p-10 rounded-lg shadow-lg w-96 md:w-[28rem]"
