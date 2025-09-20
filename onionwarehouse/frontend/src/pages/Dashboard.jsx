@@ -9,9 +9,7 @@ import ShopForm from "../components/ShopForm";
 
 export default function Dashboard() {
   const navigate = useNavigate();
-
   const [activeAction, setActiveAction] = useState("view");
-
   const [shops, setShops] = useState([]);
   const [boxes, setBoxes] = useState([]);
   const [bills, setBills] = useState([]);
@@ -77,7 +75,10 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="p-6">
+    <div
+      className="p-6 min-h-screen bg-cover bg-center"
+      style={{ backgroundImage: "url('/images/home.jpg')" }}
+    >
       {/* Back button */}
       <button
         onClick={() => navigate(-1)}
@@ -148,17 +149,13 @@ export default function Dashboard() {
 
       {/* Render Sections Based on Active Action */}
       {activeAction === "addShop" && <ShopForm onAdd={handleAddShop} shops={shops} />}
-
       {activeAction === "addBox" && <BoxForm onAdd={handleAddBox} shops={shops} />}
-
       {activeAction === "updateBox" && (
         <BoxList boxes={boxes} onEdit={handleEditBox} onRemove={() => {}} />
       )}
-
       {activeAction === "deleteBox" && (
         <BoxList boxes={boxes} onRemove={handleRemoveBox} onEdit={() => {}} />
       )}
-
       {activeAction === "billing" && (
         <BillingForm boxes={boxes} shops={shops} onAddBill={handleAddBill} />
       )}

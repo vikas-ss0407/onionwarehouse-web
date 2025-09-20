@@ -8,11 +8,12 @@ import Navbar from "./components/Navbar";
 
 export default function App() {
   const location = useLocation();
-  const showNavbar = location.pathname === "/dashboard"; // show only on Dashboard
+  // Show navbar on ALL dashboard pages and sub-pages
+  const showNavbar = location.pathname.startsWith("/dashboard");
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {showNavbar && <Navbar />} {/* Navbar only on dashboard */}
+      {showNavbar && <Navbar />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />

@@ -31,13 +31,13 @@ export default function Signup() {
   return (
     <div
       className="flex justify-end items-center h-[100vh] pr-10 bg-cover bg-center"
-      style={{ backgroundImage: "url('/images/signup-bg.png')" }}
+      style={{ backgroundImage: "url('/images/signup2.jpeg')" }}
     >
       <form
         className="bg-white bg-opacity-90 p-10 rounded-lg shadow-lg w-96 md:w-[28rem]"
         onSubmit={handleSignup}
       >
-        <h2 className="text-3xl font-bold mb-6 text-green-700 text-center">
+        <h2 className="text-3xl font-bold mb-6 text-blue-700 text-center">
           Signup
         </h2>
         <input
@@ -82,7 +82,7 @@ export default function Signup() {
         />
         <button
           type="submit"
-          className="w-full bg-green-700 text-white p-3 rounded-lg hover:bg-green-800 mb-4 text-lg"
+          className="w-full bg-blue-700 text-white p-3 rounded-lg hover:bg-blue-800 mb-4 text-lg"
         >
           Signup
         </button>

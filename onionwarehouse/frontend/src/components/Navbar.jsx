@@ -7,8 +7,6 @@ export default function Navbar() {
   const user = JSON.parse(localStorage.getItem("user"));
   const [open, setOpen] = useState(false);
 
-  if (!user) return null;
-
   const handleLogout = () => {
     localStorage.removeItem("user");
     navigate("/");
@@ -22,7 +20,7 @@ export default function Navbar() {
           className="flex items-center gap-2"
         >
           <FaUserCircle size={28} />
-          <span>{user.name}</span>
+          <span>{user ? user.name : 'Guest'}</span>
         </button>
 
         {open && (
