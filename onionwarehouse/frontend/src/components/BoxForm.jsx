@@ -1,13 +1,15 @@
 import { useState } from "react";
 
-export default function BoxForm({ onAdd }) {
+export default function BoxForm({ onAdd, shops }) {
   const [boxNumber, setBoxNumber] = useState("");
   const [type, setType] = useState("");
   const [quantity, setQuantity] = useState("");
+  const [pricePerKg, setPricePerKg] = useState("");
+  const [shopId, setShopId] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!boxNumber || !type || !quantity) {
+    if (!boxNumber || !type || !quantity || !pricePerKg || !shopId) {
       alert("Please fill all fields.");
       return;
     }
@@ -16,10 +18,14 @@ export default function BoxForm({ onAdd }) {
       boxNumber,
       type,
       quantity,
+      pricePerKg,
+      shopId,
     });
     setBoxNumber("");
     setType("");
     setQuantity("");
+    setPricePerKg("");
+    setShopId("");
   };
 
   return (
@@ -48,6 +54,25 @@ export default function BoxForm({ onAdd }) {
           onChange={(e) => setQuantity(e.target.value)}
           className="p-2 border rounded"
         />
+        <input
+          type="number"
+          placeholder="Price per kg (₹)"
+          value={pricePerKg}
+          onChange={(e) => setPricePerKg(e.target.value)}
+          className="p-2 border rounded"
+        />
+        <select
+          value={shopId}
+          onChange={(e) => setShopId(e.target.value)}
+          className="p-2 border rounded"
+        >
+          <option value="">-- Select Shop --</option>
+          {shops.map((shop) => (
+            <option key={shop.id} value={shop.id}>
+              {shop.name}
+            </option>
+          ))}
+        </select>
         <button
           type="submit"
           className="bg-green-500 text-white p-2 rounded hover:bg-green-600"

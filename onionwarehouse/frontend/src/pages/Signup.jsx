@@ -3,15 +3,29 @@ import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    password: "",
+    confirmPassword: "",
+  });
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSignup = (e) => {
     e.preventDefault();
-    alert(`Signup attempt: ${form.email}`);
-    navigate("/dashboard"); // navigate to Dashboard after signup
+    if (form.password !== form.confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+
+    // Save user to localStorage (simple persistence)
+    localStorage.setItem("user", JSON.stringify({ ...form, address: "" }));
+
+    alert(`Signup successful: ${form.email}`);
+    navigate("/dashboard");
   };
 
   return (
@@ -43,11 +57,27 @@ export default function Signup() {
           onChange={handleChange}
         />
         <input
+          type="text"
+          name="phone"
+          placeholder="Phone Number"
+          className="w-full p-3 mb-4 border rounded text-lg"
+          value={form.phone}
+          onChange={handleChange}
+        />
+        <input
           type="password"
           name="password"
           placeholder="Password"
           className="w-full p-3 mb-4 border rounded text-lg"
           value={form.password}
+          onChange={handleChange}
+        />
+        <input
+          type="password"
+          name="confirmPassword"
+          placeholder="Confirm Password"
+          className="w-full p-3 mb-4 border rounded text-lg"
+          value={form.confirmPassword}
           onChange={handleChange}
         />
         <button
@@ -56,8 +86,6 @@ export default function Signup() {
         >
           Signup
         </button>
-
-        {/* Back Button */}
         <button
           type="button"
           onClick={() => navigate(-1)}
