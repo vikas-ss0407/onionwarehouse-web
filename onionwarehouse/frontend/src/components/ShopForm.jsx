@@ -7,23 +7,33 @@ export default function ShopForm({ onAdd }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (!name || !address || !fssai) {
       alert("Please fill all shop details.");
       return;
     }
+
     onAdd({
       id: Date.now(),
       name,
       address,
       fssai,
     });
+
     setName("");
     setAddress("");
     setFssai("");
   };
 
   return (
-    <form onSubmit={handleSubmit} className="mb-4 p-4 border rounded bg-gray-50">
+    <form
+      onSubmit={handleSubmit}
+      className="mb-4 p-4 border rounded bg-gray-50 max-w-md"
+    >
+      <h2 className="text-2xl font-bold mb-4 text-green-700">
+        Add Shop
+      </h2>
+
       <div className="flex flex-col gap-4">
         <input
           type="text"
@@ -32,6 +42,7 @@ export default function ShopForm({ onAdd }) {
           onChange={(e) => setName(e.target.value)}
           className="p-2 border rounded"
         />
+
         <input
           type="text"
           placeholder="Address"
@@ -39,6 +50,7 @@ export default function ShopForm({ onAdd }) {
           onChange={(e) => setAddress(e.target.value)}
           className="p-2 border rounded"
         />
+
         <input
           type="text"
           placeholder="FSSAI License Number"
@@ -46,9 +58,10 @@ export default function ShopForm({ onAdd }) {
           onChange={(e) => setFssai(e.target.value)}
           className="p-2 border rounded"
         />
+
         <button
           type="submit"
-          className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+          className="bg-green-500 text-white p-2 rounded hover:bg-green-600"
         >
           Add Shop
         </button>

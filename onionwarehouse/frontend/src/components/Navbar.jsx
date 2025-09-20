@@ -4,14 +4,14 @@ import { FaUserCircle } from "react-icons/fa";
 
 export default function Navbar() {
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user")); 
+  const user = JSON.parse(localStorage.getItem("user"));
   const [open, setOpen] = useState(false);
 
-  if (!user) return null; // extra safety
+  if (!user) return null;
 
   const handleLogout = () => {
     localStorage.removeItem("user");
-    navigate("/"); // redirect to home
+    navigate("/");
   };
 
   return (
@@ -33,6 +33,7 @@ export default function Navbar() {
             >
               Profile
             </button>
+
             <button
               onClick={handleLogout}
               className="w-full text-left px-4 py-2 hover:bg-gray-200"
