@@ -1,15 +1,26 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { login } from "../api/auth";
 
 export default function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    alert(`Login attempt: ${email}`);
-    navigate("/dashboard"); 
+    try {
+      const res = await login({ email, password });
+      if (res.user) {
+        // Token is now stored in httpOnly cookie automatically
+        navigate("/dashboard");
+      } else {
+        alert(res.message || "Login failed");
+      }
+    } catch (err) {
+      alert("Server error, try again");
+      console.error(err);
+    }
   };
 
   return (
@@ -44,8 +55,6 @@ export default function Login() {
         >
           Login
         </button>
-
-        {/* Back Button */}
         <button
           type="button"
           onClick={() => navigate(-1)}

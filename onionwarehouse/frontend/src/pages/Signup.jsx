@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { signup } from "../api/auth";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -14,18 +15,30 @@ export default function Signup() {
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
     if (form.password !== form.confirmPassword) {
       alert("Passwords do not match!");
       return;
     }
 
-    // Save user to localStorage (simple persistence)
-    localStorage.setItem("user", JSON.stringify({ ...form, address: "" }));
-
-    alert(`Signup successful: ${form.email}`);
-    navigate("/dashboard");
+    try {
+      const res = await signup({
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        password: form.password,
+      });
+      if (res.user) {
+        // Token is now stored in httpOnly cookie automatically
+        navigate("/dashboard");
+      } else {
+        alert(res.message || "Signup failed");
+      }
+    } catch (err) {
+      alert("Server error, try again");
+      console.error(err);
+    }
   };
 
   return (

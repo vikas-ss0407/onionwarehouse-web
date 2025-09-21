@@ -1,164 +1,101 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaPlus, FaEdit, FaTrash, FaMoneyBill, FaStore } from "react-icons/fa";
+import { useState, useEffect } from "react";
+import { FaTrash } from "react-icons/fa";
 
 import BoxForm from "../components/BoxForm";
 import BoxList from "../components/BoxList";
 import BillingForm from "../components/BillingForm";
 import ShopForm from "../components/ShopForm";
 
+import { getShops, createShop, deleteShop } from "../api/shops";
+import { getBoxes, createBox, deleteBox } from "../api/boxes";
+import { getBills, createBill } from "../api/bills";
+
 export default function Dashboard() {
   const navigate = useNavigate();
-  const [activeAction, setActiveAction] = useState("view");
   const [shops, setShops] = useState([]);
   const [boxes, setBoxes] = useState([]);
   const [bills, setBills] = useState([]);
 
-  // ----- Shop operations -----
-  const handleAddShop = (shop) => {
-    setShops([...shops, shop]);
-    setActiveAction("view");
-  };
-
-  // ----- Box operations -----
-  const handleAddBox = (box) => {
-    setBoxes([...boxes, box]);
-    setActiveAction("view");
-  };
-
-  const handleRemoveBox = (id) => setBoxes(boxes.filter((b) => b.id !== id));
-
-  const handleEditBox = (box) => {
-    const newBoxNumber = prompt("Enter new Box Number:", box.boxNumber);
-    const newType = prompt(
-      "Enter new Onion Type (Bulb Onion / Shallot Onion):",
-      box.type
-    );
-    const newQuantity = prompt("Enter new Quantity (kg):", box.quantity);
-    const newPrice = prompt("Enter Cost Price per kg:", box.pricePerKg);
-
-    if (newBoxNumber && newType && newQuantity && newPrice) {
-      setBoxes(
-        boxes.map((b) =>
-          b.id === box.id
-            ? {
-                ...b,
-                boxNumber: newBoxNumber,
-                type: newType,
-                quantity: Number(newQuantity),
-                pricePerKg: Number(newPrice),
-              }
-            : b
-        )
-      );
-    }
-  };
-
-  // ----- Billing operations -----
-  const handleAddBill = (boxId, sellingPrice) => {
-    const selectedBox = boxes.find((b) => b.id === boxId);
-    if (!selectedBox) return;
-
-    const total = selectedBox.quantity * sellingPrice;
-    const bill = {
-      id: Date.now(),
-      boxNumber: selectedBox.boxNumber,
-      type: selectedBox.type,
-      shopName: shops.find((s) => s.id === selectedBox.shopId)?.name || "No Shop",
-      quantity: selectedBox.quantity,
-      costPrice: selectedBox.pricePerKg,
-      sellingPrice,
-      total,
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const shopsData = await getShops();
+        const boxesData = await getBoxes();
+        const billsData = await getBills();
+        setShops(Array.isArray(shopsData) ? shopsData : []);
+        setBoxes(Array.isArray(boxesData) ? boxesData : []);
+        setBills(Array.isArray(billsData) ? billsData : []);
+      } catch (err) {
+        console.error("Failed to fetch dashboard data:", err);
+        setShops([]);
+        setBoxes([]);
+        setBills([]);
+      }
     };
+    fetchData();
+  }, []);
 
-    setBills([...bills, bill]);
+  const handleAddShop = async (shop) => {
+    const savedShop = await createShop(shop);
+    if (savedShop) setShops([...shops, savedShop]);
+  };
+
+  const handleDeleteShop = async (id) => {
+    const deleted = await deleteShop(id);
+    if (deleted) setShops(shops.filter((s) => s._id !== id));
+  };
+
+  const handleAddBox = async (box) => {
+    const savedBox = await createBox(box);
+    if (savedBox) setBoxes([...boxes, savedBox]);
+  };
+
+  const handleDeleteBox = async (id) => {
+    const deleted = await deleteBox(id);
+    if (deleted) setBoxes(boxes.filter((b) => b._id !== id));
+  };
+
+  const handleAddBill = async (boxId, sellingPrice) => {
+    const bill = await createBill({ boxId, sellingPrice });
+    if (bill) setBills([...bills, bill]);
   };
 
   return (
-    <div
-      className="p-6 min-h-screen bg-cover bg-center"
-      style={{ backgroundImage: "url('/images/home.jpg')" }}
-    >
-      {/* Back button */}
-      <button
-        onClick={() => navigate(-1)}
-        className="mb-4 bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400"
-      >
-        ← Back
-      </button>
+    <div className="p-6">
+      <h1 className="text-4xl font-bold mb-4">Dashboard</h1>
 
-      <h2 className="text-3xl font-bold text-green-700 mb-4">Dashboard</h2>
+      <div className="flex gap-10 flex-wrap">
+        <div className="w-full md:w-1/3">
+          <ShopForm onAddShop={handleAddShop} />
+          <ul className="mt-4">
+            {shops.length > 0 ? shops.map((shop) => (
+              <li key={shop._id} className="flex justify-between p-2 border mb-2">
+                {shop.name}
+                <button onClick={() => handleDeleteShop(shop._id)} className="text-red-500">
+                  <FaTrash />
+                </button>
+              </li>
+            )) : <li>No shops found</li>}
+          </ul>
+        </div>
 
-      {/* Action Buttons */}
-      <div className="flex flex-wrap gap-4 mb-6">
-        <button
-          onClick={() => setActiveAction("addShop")}
-          className={`px-4 py-2 rounded flex items-center gap-2 ${
-            activeAction === "addShop"
-              ? "bg-green-700 text-white"
-              : "bg-gray-200 hover:bg-gray-300"
-          }`}
-        >
-          <FaStore /> Add Shop
-        </button>
+        <div className="w-full md:w-1/3">
+          <BoxForm shops={shops} onAddBox={handleAddBox} />
+          <BoxList boxes={boxes} onDeleteBox={handleDeleteBox} />
+        </div>
 
-        <button
-          onClick={() => setActiveAction("addBox")}
-          className={`px-4 py-2 rounded flex items-center gap-2 ${
-            activeAction === "addBox"
-              ? "bg-green-700 text-white"
-              : "bg-gray-200 hover:bg-gray-300"
-          }`}
-        >
-          <FaPlus /> Add Box
-        </button>
-
-        <button
-          onClick={() => setActiveAction("updateBox")}
-          className={`px-4 py-2 rounded flex items-center gap-2 ${
-            activeAction === "updateBox"
-              ? "bg-blue-700 text-white"
-              : "bg-gray-200 hover:bg-gray-300"
-          }`}
-        >
-          <FaEdit /> Update Box
-        </button>
-
-        <button
-          onClick={() => setActiveAction("deleteBox")}
-          className={`px-4 py-2 rounded flex items-center gap-2 ${
-            activeAction === "deleteBox"
-              ? "bg-red-700 text-white"
-              : "bg-gray-200 hover:bg-gray-300"
-          }`}
-        >
-          <FaTrash /> Delete Box
-        </button>
-
-        <button
-          onClick={() => setActiveAction("billing")}
-          className={`px-4 py-2 rounded flex items-center gap-2 ${
-            activeAction === "billing"
-              ? "bg-yellow-500 text-white"
-              : "bg-gray-200 hover:bg-gray-300"
-          }`}
-        >
-          <FaMoneyBill /> Billing
-        </button>
+        <div className="w-full md:w-1/3">
+          <BillingForm boxes={boxes} onAddBill={handleAddBill} />
+          <ul className="mt-4">
+            {bills.length > 0 ? bills.map((bill) => (
+              <li key={bill._id} className="flex justify-between p-2 border mb-2">
+                Box: {bill.boxId} | Price: ₹{bill.sellingPrice}
+              </li>
+            )) : <li>No bills found</li>}
+          </ul>
+        </div>
       </div>
-
-      {/* Render Sections Based on Active Action */}
-      {activeAction === "addShop" && <ShopForm onAdd={handleAddShop} shops={shops} />}
-      {activeAction === "addBox" && <BoxForm onAdd={handleAddBox} shops={shops} />}
-      {activeAction === "updateBox" && (
-        <BoxList boxes={boxes} onEdit={handleEditBox} onRemove={() => {}} />
-      )}
-      {activeAction === "deleteBox" && (
-        <BoxList boxes={boxes} onRemove={handleRemoveBox} onEdit={() => {}} />
-      )}
-      {activeAction === "billing" && (
-        <BillingForm boxes={boxes} shops={shops} onAddBill={handleAddBill} />
-      )}
     </div>
   );
 }
