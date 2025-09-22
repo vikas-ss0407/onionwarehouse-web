@@ -1,16 +1,17 @@
 import { useState, useEffect } from "react";
+import Cookies from "js-cookie";
 
 export default function Profile() {
   const [user, setUser] = useState(null);
   const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
-    const savedUser = JSON.parse(localStorage.getItem("user"));
+    const savedUser = Cookies.get("user") ? JSON.parse(Cookies.get("user")) : null;
     if (savedUser) setUser(savedUser);
   }, []);
 
   const handleSave = () => {
-    localStorage.setItem("user", JSON.stringify(user));
+    Cookies.set("user", JSON.stringify(user), { expires: 1 }); // expires in 1 day
     setEditMode(false);
     alert("Profile updated!");
   };

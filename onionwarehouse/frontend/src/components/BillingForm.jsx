@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function BillingForm({ boxes, shops, onAddBill }) {
+export default function BillingForm({ boxes, onAddBill }) {
   const [selectedBox, setSelectedBox] = useState("");
   const [sellingPrice, setSellingPrice] = useState("");
 
@@ -29,7 +29,7 @@ export default function BillingForm({ boxes, shops, onAddBill }) {
           <option value="">-- Select Box --</option>
           {boxes.map((box) => (
             <option key={box.id} value={box.id}>
-              {box.boxNumber} ({box.type}) - {shops.find(s => s.id === box.shopId)?.name || "No Shop"} - Qty: {box.quantity}kg - Cost: ₹{box.pricePerKg}/kg
+              {box.boxNumber} ({box.type}) - Qty: {box.quantity}kg - Cost: ₹{box.pricePerKg}/kg
             </option>
           ))}
         </select>
@@ -48,7 +48,6 @@ export default function BillingForm({ boxes, shops, onAddBill }) {
         >
           Generate Bill
         </button>
-
       </form>
 
       <table className="w-full border-collapse border">
@@ -56,7 +55,6 @@ export default function BillingForm({ boxes, shops, onAddBill }) {
           <tr className="bg-yellow-100">
             <th className="border p-2">Box Number</th>
             <th className="border p-2">Type</th>
-            <th className="border p-2">Shop</th>
             <th className="border p-2">Quantity</th>
             <th className="border p-2">Cost Price</th>
             <th className="border p-2">Selling Price</th>
@@ -68,7 +66,6 @@ export default function BillingForm({ boxes, shops, onAddBill }) {
             <tr key={box.id}>
               <td className="border p-2">{box.boxNumber}</td>
               <td className="border p-2">{box.type}</td>
-              <td className="border p-2">{shops.find(s => s.id === box.shopId)?.name || "No Shop"}</td>
               <td className="border p-2">{box.quantity}</td>
               <td className="border p-2">{box.pricePerKg}</td>
               <td className="border p-2">{sellingPrice}</td>

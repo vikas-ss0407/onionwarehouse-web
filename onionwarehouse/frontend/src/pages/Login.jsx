@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../api/auth";
+import Cookies from "js-cookie";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -12,6 +13,7 @@ export default function Login() {
     try {
       const res = await login({ email, password });
       if (res.user) {
+        Cookies.set("user", JSON.stringify(res.user), { expires: 1 }); // store in cookie
         alert("Logged in successfully ✅");
         navigate("/dashboard");
       } else {
@@ -28,15 +30,13 @@ export default function Login() {
       className="flex justify-between items-center h-[100vh] px-10 bg-cover bg-center"
       style={{ backgroundImage: "url('/images/login2.jpeg')" }}
     >
-      {/* Simple Left-Side Text */}
-     {/* Left Side Panel */}
-<div className="hidden md:block w-1/2 p-12 bg-gray-900 bg-opacity-40 rounded-xl text-gray-100">
-  <h1 className="text-5xl font-bold mb-6">Welcome Back</h1>
-  <p className="text-xl leading-relaxed">
-    Log in to access your warehouse dashboard and manage inventory and sales billing efficiently.
-  </p>
-</div>
-
+      {/* Left Side Panel */}
+      <div className="hidden md:block w-1/2 p-12 bg-gray-900 bg-opacity-40 rounded-xl text-gray-100">
+        <h1 className="text-5xl font-bold mb-6">Welcome Back</h1>
+        <p className="text-xl leading-relaxed">
+          Log in to access your warehouse dashboard and manage inventory and sales billing efficiently.
+        </p>
+      </div>
 
       {/* Login Form */}
       <form
