@@ -15,10 +15,24 @@ export default function Signup() {
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
+  const validatePassword = (password) => {
+    const regex =
+      /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{5,}$/;
+    return regex.test(password);
+  };
+
   const handleSignup = async (e) => {
     e.preventDefault();
+
     if (form.password !== form.confirmPassword) {
       alert("Passwords do not match!");
+      return;
+    }
+
+    if (!validatePassword(form.password)) {
+      alert(
+        "Password must contain:\n- At least 1 uppercase letter\n- At least 1 number\n- At least 1 special character\n- Minimum length 5"
+      );
       return;
     }
 
@@ -29,9 +43,15 @@ export default function Signup() {
         phone: form.phone,
         password: form.password,
       });
+
+      if (res.message === "User already exists") {
+        alert("Email already exists ❌");
+        return;
+      }
+
       if (res.user) {
-        // Token is now stored in httpOnly cookie automatically
-        navigate("/dashboard");
+        alert("Account created successfully ✅");
+        navigate("/"); // Redirect to home page
       } else {
         alert(res.message || "Signup failed");
       }
@@ -43,9 +63,30 @@ export default function Signup() {
 
   return (
     <div
-      className="flex justify-end items-center h-[100vh] pr-10 bg-cover bg-center"
+      className="flex justify-between items-center h-[100vh] px-10 bg-cover bg-center"
       style={{ backgroundImage: "url('/images/signup2.jpeg')" }}
     >
+      {/* Left Side Guidelines Text */}
+      <div className="hidden md:block w-1/2 p-10 bg-gray-800 bg-opacity-40 rounded-lg text-gray-100">
+        <h1 className="text-4xl font-bold mb-6">Create Your Account</h1>
+        <p className="mb-4 text-lg text-gray-200">
+          Join to efficiently manage your warehouse by monitoring environmental conditions and managing inventory and billing. Please follow the
+          guidelines below:
+        </p>
+        <ul className="space-y-3 text-base">
+          <li>✔ Use a valid email (must be unique)</li>
+          <li>✔ Provide your real phone number</li>
+          <li>✔ Password must include:</li>
+          <ul className="ml-5 list-disc space-y-1">
+            <li>At least 1 uppercase letter</li>
+            <li>At least 1 number</li>
+            <li>At least 1 special character (!@#$%^&*)</li>
+            <li>Minimum length of 5 characters</li>
+          </ul>
+        </ul>
+      </div>
+
+      {/* Signup Form */}
       <form
         className="bg-white bg-opacity-90 p-10 rounded-lg shadow-lg w-96 md:w-[28rem]"
         onSubmit={handleSignup}
