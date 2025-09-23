@@ -1,8 +1,11 @@
-import API_BASE_URL from "./config";
+import API_BASE_URL, { getAuthHeader } from "./config";
 
 export const getBoxes = async () => {
   try {
-    const res = await fetch(`${API_BASE_URL}/boxes`, { credentials: 'include' });
+    const res = await fetch(`${API_BASE_URL}/boxes`, {
+      headers: getAuthHeader(),
+      credentials: 'include'
+    });
     return res.ok ? await res.json() : [];
   } catch (err) {
     console.error("Failed to fetch boxes:", err);
@@ -14,7 +17,7 @@ export const createBox = async (box) => {
   try {
     const res = await fetch(`${API_BASE_URL}/boxes`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", ...getAuthHeader() },
       credentials: 'include',
       body: JSON.stringify(box),
     });
@@ -29,7 +32,7 @@ export const updateBox = async (id, box) => {
   try {
     const res = await fetch(`${API_BASE_URL}/boxes/${id}`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", ...getAuthHeader() },
       credentials: 'include',
       body: JSON.stringify(box),
     });
@@ -44,6 +47,7 @@ export const deleteBox = async (id) => {
   try {
     const res = await fetch(`${API_BASE_URL}/boxes/${id}`, {
       method: "DELETE",
+      headers: getAuthHeader(),
       credentials: 'include',
     });
     return res.ok ? await res.json() : null;

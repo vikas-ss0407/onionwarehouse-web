@@ -2,15 +2,15 @@ const Shop = require('../models/Shop');
 
 
 exports.createShop = async (req, res) => {
-try {
-const { name, address, fssai } = req.body;
-const shop = new Shop({ name, address, fssai, owner: req.user.id });
-await shop.save();
-res.json(shop);
-} catch (err) {
-console.error(err);
-res.status(500).json({ message: 'Server error' });
-}
+  try {
+    const { name, address, fssai, phone } = req.body; // <-- include phone
+    const shop = new Shop({ name, address, fssai, phone, owner: req.user.id });
+    await shop.save();
+    res.json(shop);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
 };
 
 
@@ -33,4 +33,20 @@ res.json({ message: 'Deleted' });
 console.error(err);
 res.status(500).json({ message: 'Server error' });
 }
+};
+
+// Add this function
+exports.updateShop = async (req, res) => {
+  try {
+    const { name, address, phone, fssai } = req.body;
+    const shop = await Shop.findByIdAndUpdate(
+      req.params.id,
+      { name, address, phone, fssai },
+      { new: true } // return the updated document
+    );
+    res.json(shop);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
 };

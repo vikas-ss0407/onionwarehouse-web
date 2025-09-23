@@ -4,11 +4,12 @@ export default function ShopForm({ onAdd }) {
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
   const [fssai, setFssai] = useState("");
+  const [phone, setPhone] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!name || !address || !fssai) {
+    if (!name || !address || !fssai || !phone) {
       alert("Please fill all shop details.");
       return;
     }
@@ -18,11 +19,13 @@ export default function ShopForm({ onAdd }) {
       name,
       address,
       fssai,
+      phone,
     });
 
     setName("");
     setAddress("");
     setFssai("");
+    setPhone("");
   };
 
   return (
@@ -56,6 +59,14 @@ export default function ShopForm({ onAdd }) {
           placeholder="FSSAI License Number"
           value={fssai}
           onChange={(e) => setFssai(e.target.value)}
+          className="p-2 border rounded"
+        />
+
+        <input
+          type="text"
+          placeholder="Phone Number"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
           className="p-2 border rounded"
         />
 
