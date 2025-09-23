@@ -9,19 +9,19 @@ export default function Home() {
       style={{ backgroundImage: "url('/images/home1.jpg')" }}
     >
       <div className="bg-white bg-opacity-80 p-8 rounded-lg max-w-2xl w-full text-center transform -translate-y-8">
-        {/* Title */}
+       
         <h1 className="text-4xl md:text-5xl font-bold text-red-700 mb-4">
           Onion Track
         </h1>
 
-        {/* Description */}
+    
         <p className="text-gray-800 text-lg md:text-xl mb-6">
           Efficiently monitor, manage, and track all onion storage boxes.  
           Add, update, delete boxes and generate billing information easily.  
           Ensure freshness, quality, and smooth operations in your warehouse.
         </p>
 
-        {/* Login / Signup Buttons */}
+      
         <div className="flex justify-center gap-4">
           <button
             onClick={() => navigate("/login")}

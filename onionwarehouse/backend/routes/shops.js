@@ -4,9 +4,9 @@ const authMiddleware = require('../middleware/auth');
 
 const router = express.Router();
 
-router.post('/', authMiddleware, createShop);     // Add shop
-router.get('/', authMiddleware, getShops);        // Get all shops of logged-in user
-router.delete('/:id', authMiddleware, deleteShop);// Delete shop
-router.put('/:id', authMiddleware, updateShop);   // <-- Add this line
+router.post('/', authMiddleware, createShop);     
+router.get('/', authMiddleware, getShops);        
+router.delete('/:id', authMiddleware, deleteShop);
+router.put('/:id', authMiddleware, updateShop);   
 
 module.exports = router;

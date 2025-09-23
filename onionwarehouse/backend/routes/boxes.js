@@ -4,9 +4,9 @@ const authMiddleware = require('../middleware/auth');
 
 const router = express.Router();
 
-router.post('/', authMiddleware, createBox);          // Add box
-router.get('/', authMiddleware, getBoxes);            // Get all boxes
-router.put('/:id', authMiddleware, updateBox);        // Update box
-router.delete('/:id', authMiddleware, deleteBox);     // Delete box
+router.post('/', authMiddleware, createBox);          
+router.get('/', authMiddleware, getBoxes);            
+router.put('/:id', authMiddleware, updateBox);        
+router.delete('/:id', authMiddleware, deleteBox);     
 
 module.exports = router;

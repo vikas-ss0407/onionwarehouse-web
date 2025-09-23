@@ -1,13 +1,13 @@
 const jwt = require('jsonwebtoken');
 
 module.exports = function (req, res, next) {
-  const token = req.cookies.token; // read from cookie
+  const token = req.cookies.token; 
 
   if (!token) return res.status(401).json({ message: 'No token provided' });
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // { id, email }
+    req.user = decoded; 
     next();
   } catch (err) {
     if (err.name === 'TokenExpiredError') {

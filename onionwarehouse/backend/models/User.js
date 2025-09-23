@@ -8,5 +8,4 @@ const userSchema = new mongoose.Schema({
   address: { type: String },
 });
 
-// Use existing model if already compiled
 module.exports = mongoose.models.User || mongoose.model('User', userSchema);

@@ -51,7 +51,7 @@ export default function Signup() {
 
       if (res.user) {
         alert("Account created successfully ✅");
-        navigate("/"); // Redirect to home page
+        navigate("/"); 
       } else {
         alert(res.message || "Signup failed");
       }
@@ -66,7 +66,7 @@ export default function Signup() {
       className="flex justify-between items-center h-[100vh] px-10 bg-cover bg-center"
       style={{ backgroundImage: "url('/images/signup2.jpeg')" }}
     >
-      {/* Left Side Guidelines Text */}
+      
       <div className="hidden md:block w-1/2 p-10 bg-gray-800 bg-opacity-40 rounded-lg text-gray-100">
         <h1 className="text-4xl font-bold mb-6">Create Your Account</h1>
         <p className="mb-4 text-lg text-gray-200">
@@ -86,7 +86,7 @@ export default function Signup() {
         </ul>
       </div>
 
-      {/* Signup Form */}
+      
       <form
         className="bg-white bg-opacity-90 p-10 rounded-lg shadow-lg w-96 md:w-[28rem]"
         onSubmit={handleSignup}

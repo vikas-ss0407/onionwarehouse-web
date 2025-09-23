@@ -11,7 +11,7 @@ export default function Profile() {
   }, []);
 
   const handleSave = () => {
-    Cookies.set("user", JSON.stringify(user), { expires: 1 }); // expires in 1 day
+    Cookies.set("user", JSON.stringify(user), { expires: 1 }); 
     setEditMode(false);
     alert("Profile updated!");
   };

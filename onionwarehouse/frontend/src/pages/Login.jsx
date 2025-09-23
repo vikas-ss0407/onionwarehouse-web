@@ -13,7 +13,7 @@ export default function Login() {
     try {
       const res = await login({ email, password });
       if (res.user) {
-        Cookies.set("user", JSON.stringify(res.user), { expires: 1 }); // store in cookie
+        Cookies.set("user", JSON.stringify(res.user), { expires: 1 }); 
         alert("Logged in successfully ✅");
         navigate("/dashboard");
       } else {
@@ -30,7 +30,7 @@ export default function Login() {
       className="flex justify-between items-center h-[100vh] px-10 bg-cover bg-center"
       style={{ backgroundImage: "url('/images/login2.jpeg')" }}
     >
-      {/* Left Side Panel */}
+      
       <div className="hidden md:block w-1/2 p-12 bg-gray-900 bg-opacity-40 rounded-xl text-gray-100">
         <h1 className="text-5xl font-bold mb-6">Welcome Back</h1>
         <p className="text-xl leading-relaxed">
@@ -38,7 +38,7 @@ export default function Login() {
         </p>
       </div>
 
-      {/* Login Form */}
+      
       <form
         className="bg-white bg-opacity-90 p-10 rounded-lg shadow-lg w-96 md:w-[28rem]"
         onSubmit={handleLogin}
