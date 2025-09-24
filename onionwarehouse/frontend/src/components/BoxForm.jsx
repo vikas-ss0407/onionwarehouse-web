@@ -1,34 +1,29 @@
 import { useState } from "react";
 
-export default function BoxForm({ shops, onAdd }) {
+export default function BoxForm({ onAdd }) {
   const [boxNumber, setBoxNumber] = useState("");
   const [type, setType] = useState("");
   const [quantity, setQuantity] = useState("");
   const [pricePerKg, setPricePerKg] = useState("");
-  const [shopId, setShopId] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (!boxNumber || !type || !quantity || !pricePerKg || !shopId) {
+    if (!boxNumber || !type || !quantity || !pricePerKg) {
       alert("Please fill all fields.");
       return;
     }
 
     onAdd({
-      id: Date.now(),
       boxNumber,
       type,
       quantity: Number(quantity),
       pricePerKg: Number(pricePerKg),
-      shopId
     });
 
     setBoxNumber("");
     setType("");
     setQuantity("");
     setPricePerKg("");
-    setShopId("");
   };
 
   return (
@@ -41,7 +36,6 @@ export default function BoxForm({ shops, onAdd }) {
           onChange={(e) => setBoxNumber(e.target.value)}
           className="p-2 border rounded"
         />
-
         <select
           value={type}
           onChange={(e) => setType(e.target.value)}
@@ -51,7 +45,6 @@ export default function BoxForm({ shops, onAdd }) {
           <option value="Bulb Onion">Bulb Onion</option>
           <option value="Shallot Onion">Shallot Onion</option>
         </select>
-
         <input
           type="number"
           placeholder="Quantity (kg)"
@@ -59,7 +52,6 @@ export default function BoxForm({ shops, onAdd }) {
           onChange={(e) => setQuantity(e.target.value)}
           className="p-2 border rounded"
         />
-
         <input
           type="number"
           placeholder="Cost Price per kg"
@@ -67,21 +59,9 @@ export default function BoxForm({ shops, onAdd }) {
           onChange={(e) => setPricePerKg(e.target.value)}
           className="p-2 border rounded"
         />
-
-        <select
-          value={shopId}
-          onChange={(e) => setShopId(e.target.value)}
-          className="p-2 border rounded"
-        >
-          <option value="">-- Select Shop --</option>
-          {shops.map(shop => (
-            <option key={shop._id} value={shop._id}>{shop.name}</option>
-          ))}
-        </select>
-
         <button
           type="submit"
-          className="bg-green-500 text-white p-2 rounded hover:bg-green-600 flex items-center gap-2"
+          className="bg-green-500 text-white p-2 rounded hover:bg-green-600"
         >
           Add Box
         </button>

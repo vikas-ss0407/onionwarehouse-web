@@ -14,29 +14,19 @@ export default function Dashboard() {
         >
           Manage Shops
         </button>
+
         <button
-          onClick={() => navigate("/add-box")}
+          onClick={() => navigate("/manage-boxes")}
           className="bg-blue-600 text-white px-4 py-2 rounded"
         >
-          Add Box
+          Manage Boxes
         </button>
-        <button
-          onClick={() => navigate("/update-box")}
-          className="bg-yellow-600 text-white px-4 py-2 rounded"
-        >
-          Update Box
-        </button>
+
         <button
           onClick={() => navigate("/billing")}
           className="bg-purple-600 text-white px-4 py-2 rounded"
         >
           Billing
-        </button>
-        <button
-          onClick={() => navigate("/view-stocks")}
-          className="bg-gray-600 text-white px-4 py-2 rounded"
-        >
-          View Stocks
         </button>
       </div>
     </div>
