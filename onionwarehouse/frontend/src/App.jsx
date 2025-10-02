@@ -7,7 +7,7 @@ import Profile from "./pages/Profile";
 import Navbar from "./components/Navbar";
 
 import ManageShops from "./pages/ManageShops";
-import ManageBoxes from "./pages/ManageBoxes"; // ✅ new consolidated page
+import ManageBoxes from "./pages/ManageBoxes"; 
 import Billing from "./pages/Billing";
 import PrintBill from "./pages/PrintBill";
 
@@ -16,7 +16,7 @@ export default function App() {
   const showNavbar =
     location.pathname.startsWith("/dashboard") ||
     location.pathname.startsWith("/manage-shops") ||
-    location.pathname.startsWith("/manage-boxes") || // ✅ updated
+    location.pathname.startsWith("/manage-boxes") || 
     location.pathname.startsWith("/billing") ||
     location.pathname.startsWith("/print-bill");
 
@@ -30,7 +30,7 @@ export default function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/manage-shops" element={<ManageShops />} />
-        <Route path="/manage-boxes" element={<ManageBoxes />} /> {/* ✅ added */}
+        <Route path="/manage-boxes" element={<ManageBoxes />} />
         <Route path="/billing" element={<Billing />} />
         <Route path="/print-bill" element={<PrintBill />} />
       </Routes>

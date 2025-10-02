@@ -5,16 +5,18 @@ export default function BoxList({ boxes, onRemove, onEdit, hideShopColumn, hideI
   const [editBoxNumber, setEditBoxNumber] = useState("");
   const [editType, setEditType] = useState("");
   const [editQuantity, setEditQuantity] = useState("");
+  const [editPricePerKg, setEditPricePerKg] = useState(""); // new state for pricePerKg
 
   const startEdit = (box) => {
     setEditId(box._id);
     setEditBoxNumber(box.boxNumber);
     setEditType(box.type);
     setEditQuantity(box.quantity);
+    setEditPricePerKg(box.pricePerKg || ""); // initialize pricePerKg
   };
 
   const submitEdit = (id) => {
-    if (!editBoxNumber || !editType || !editQuantity) {
+    if (!editBoxNumber || !editType || !editQuantity || !editPricePerKg) {
       alert("Fill all fields");
       return;
     }
@@ -23,6 +25,7 @@ export default function BoxList({ boxes, onRemove, onEdit, hideShopColumn, hideI
       boxNumber: editBoxNumber,
       type: editType,
       quantity: Number(editQuantity),
+      pricePerKg: Number(editPricePerKg),
     });
     setEditId(null);
   };
@@ -39,6 +42,7 @@ export default function BoxList({ boxes, onRemove, onEdit, hideShopColumn, hideI
               <th className="border p-2">Box Number</th>
               <th className="border p-2">Onion Type</th>
               <th className="border p-2">Quantity (kg)</th>
+              <th className="border p-2">Cost per Kg (₹)</th> {/* new column */}
               {!hideShopColumn && <th className="border p-2">Shop</th>}
               <th className="border p-2">Actions</th>
             </tr>
@@ -84,6 +88,18 @@ export default function BoxList({ boxes, onRemove, onEdit, hideShopColumn, hideI
                     />
                   ) : (
                     box.quantity
+                  )}
+                </td>
+                <td className="border p-2">
+                  {editId === box._id ? (
+                    <input
+                      type="number"
+                      value={editPricePerKg}
+                      onChange={(e) => setEditPricePerKg(e.target.value)}
+                      className="p-1 border rounded"
+                    />
+                  ) : (
+                    box.pricePerKg
                   )}
                 </td>
                 {!hideShopColumn && <td className="border p-2">{box.shopName || box.shop}</td>}
