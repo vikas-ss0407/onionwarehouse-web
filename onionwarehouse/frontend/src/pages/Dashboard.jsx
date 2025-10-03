@@ -57,22 +57,22 @@ export default function Dashboard() {
   // Custom tick formatter for XAxis with AM/PM and seconds
   const formatXAxisTick = (timestamp) => {
     const date = new Date(timestamp);
-    return date.toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: true
+    return date.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
     });
   };
 
   // Custom tooltip formatter
   const formatTooltipLabel = (timestamp) => {
     const date = new Date(timestamp);
-    return date.toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: true
+    return date.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
     });
   };
 
@@ -105,13 +105,37 @@ export default function Dashboard() {
         <h2 className="text-2xl font-semibold mb-4">Live Sensor Readings</h2>
         {data ? (
           <div className="grid grid-cols-2 gap-4">
-            <p><strong>Temperature:</strong> {data.temperature} °C</p>
-            <p><strong>Humidity:</strong> {data.humidity} %</p>
+            <p>
+              <strong>Temperature:</strong>{" "}
+              {data.temperature < 0 ? "Sensor Error" : `${data.temperature} °C`}
+            </p>
+            <p>
+              <strong>Humidity:</strong>{" "}
+              {data.humidity < 0 ? "Sensor Error" : `${data.humidity} %`}
+            </p>
             <p>
               <strong>Light Status:</strong>{" "}
-              {data.ldrValue < LDR_THRESHOLD ? "Light" : "Dark"} <br />
-              <small className="text-gray-500">(Raw: {data.ldrValue})</small>
+              {isNaN(data.ldrValue)
+                ? "Sensor Error"
+                : data.ldrValue < LDR_THRESHOLD
+                ? "Light"
+                : "Dark"}{" "}
+              <br />
+              {!isNaN(data.ldrValue) && (
+                <small className="text-gray-500">(Raw: {data.ldrValue})</small>
+              )}
             </p>
+
+            {/* Fan Status */}
+            <p>
+              <strong>Fan Status:</strong>{" "}
+              {data.temperature > 30 ? (
+                <span className="text-green-600 font-semibold">ON</span>
+              ) : (
+                <span className="text-red-600 font-semibold">OFF</span>
+              )}
+            </p>
+
             <p className="col-span-2 text-gray-500 text-sm">
               Last updated: {new Date(data.createdAt).toLocaleString()}
             </p>
@@ -121,7 +145,7 @@ export default function Dashboard() {
         )}
       </div>
 
-      {/* Graphs - Removed the Past 5 Minutes Readings section */}
+      {/* Graphs */}
       <div className="space-y-6">
         {graphs.map(({ key, label, color }) => (
           <div key={key} className="bg-white p-4 rounded shadow">
@@ -143,9 +167,7 @@ export default function Dashboard() {
                   tick={{ fontSize: 12 }}
                 />
                 <YAxis domain={["auto", "auto"]} />
-                <Tooltip
-                  labelFormatter={formatTooltipLabel}
-                />
+                <Tooltip labelFormatter={formatTooltipLabel} />
                 <Line
                   type="monotone"
                   dataKey={key}
