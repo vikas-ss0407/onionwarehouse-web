@@ -10,6 +10,7 @@ import ManageShops from "./pages/ManageShops";
 import ManageBoxes from "./pages/ManageBoxes"; 
 import Billing from "./pages/Billing";
 import PrintBill from "./pages/PrintBill";
+import ManageSensors from "./pages/ManageSensors"; // NEW
 
 export default function App() {
   const location = useLocation();
@@ -18,7 +19,8 @@ export default function App() {
     location.pathname.startsWith("/manage-shops") ||
     location.pathname.startsWith("/manage-boxes") || 
     location.pathname.startsWith("/billing") ||
-    location.pathname.startsWith("/print-bill");
+    location.pathname.startsWith("/print-bill") ||
+    location.pathname.startsWith("/manage-sensors"); // NEW
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -33,6 +35,7 @@ export default function App() {
         <Route path="/manage-boxes" element={<ManageBoxes />} />
         <Route path="/billing" element={<Billing />} />
         <Route path="/print-bill" element={<PrintBill />} />
+        <Route path="/manage-sensors" element={<ManageSensors />} /> {/* NEW */}
       </Routes>
     </div>
   );

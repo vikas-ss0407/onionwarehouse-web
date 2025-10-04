@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const thingSpeakSchema = new mongoose.Schema({
+  sensorId: { type: String, required: true },
   temperature: String,
   humidity: String,
   ldrValue: String,
