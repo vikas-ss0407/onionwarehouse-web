@@ -6,7 +6,8 @@ export const getBoxes = async () => {
       headers: getAuthHeader(),
       credentials: 'include'
     });
-    return res.ok ? await res.json() : [];
+    const data = await res.json();
+    return Array.isArray(data) ? data : [];
   } catch (err) {
     console.error("Failed to fetch boxes:", err);
     return [];
@@ -21,10 +22,11 @@ export const createBox = async (box) => {
       credentials: 'include',
       body: JSON.stringify(box),
     });
-    return res.ok ? await res.json() : null;
+    const data = await res.json();
+    return data;
   } catch (err) {
     console.error("Failed to create box:", err);
-    return null;
+    return { message: "Failed to create box" };
   }
 };
 
@@ -36,10 +38,11 @@ export const updateBox = async (id, box) => {
       credentials: 'include',
       body: JSON.stringify(box),
     });
-    return res.ok ? await res.json() : null;
+    const data = await res.json();
+    return data;
   } catch (err) {
     console.error("Failed to update box:", err);
-    return null;
+    return { message: "Failed to update box" };
   }
 };
 
@@ -50,9 +53,27 @@ export const deleteBox = async (id) => {
       headers: getAuthHeader(),
       credentials: 'include',
     });
-    return res.ok ? await res.json() : null;
+    const data = await res.json();
+    return data;
   } catch (err) {
     console.error("Failed to delete box:", err);
-    return null;
+    return { message: "Failed to delete box" };
+  }
+};
+
+// ✅ NEW: Update maintenance alert
+export const updateAlert = async (id, alertDays, action) => {
+  try {
+    const res = await fetch(`${API_BASE_URL}/boxes/${id}/alert`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json", ...getAuthHeader() },
+      credentials: 'include',
+      body: JSON.stringify({ alertDays, action }),
+    });
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error("Failed to update alert:", err);
+    return { message: "Failed to update alert" };
   }
 };

@@ -14,7 +14,7 @@ export default function Login() {
       const res = await login({ email, password });
       if (res.user) {
         Cookies.set("user", JSON.stringify(res.user), { expires: 1 }); 
-        alert("Logged in successfully ✅");
+        alert("Logged in successfully");
         navigate("/dashboard");
       } else {
         alert(res.message || "Login failed");
