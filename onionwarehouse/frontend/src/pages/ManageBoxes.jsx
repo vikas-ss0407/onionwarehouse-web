@@ -83,21 +83,26 @@ export default function ManageBoxes() {
   // Navigate to AddBox page
   const goToAddBoxPage = () => navigate("/addbox");
 
-  return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Manage Boxes</h2>
+return (
+  <div className="p-6">
+    <h2 className="text-2xl text-center font-bold mb-4">Manage Boxes</h2>
+
+    {/* Centered Add Box button */}
+    <div className="flex justify-center mb-4">
       <button
         onClick={goToAddBoxPage}
-        className="mb-4 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+        className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
       >
         + Add Box
       </button>
-      <BoxList
-        boxes={boxes}
-        onEdit={handleUpdateBox}
-        onRemove={handleRemoveBox}
-        onUpdateAlert={handleUpdateAlert}
-      />
     </div>
-  );
+
+    <BoxList
+      boxes={boxes}
+      onEdit={handleUpdateBox}
+      onRemove={handleRemoveBox}
+      onUpdateAlert={handleUpdateAlert}
+    />
+  </div>
+);
 }

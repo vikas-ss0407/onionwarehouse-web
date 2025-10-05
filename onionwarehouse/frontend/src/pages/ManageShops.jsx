@@ -48,13 +48,16 @@ export default function ManageShops() {
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Manage Shops</h2>
+      <h2 className="text-2xl text-center font-bold mb-4">Manage Shops</h2>
+    {/* Centered Add Shop button */}
+    <div className="flex justify-center mb-4">
       <button
         onClick={handleAddShop}
-        className="mb-4 bg-green-600 text-white px-4 py-2 rounded"
+        className="bg-green-600 text-white px-4 py-2 rounded"
       >
         Add Shop
       </button>
+    </div>
       <table className="w-full border-collapse border">
         <thead>
           <tr className="bg-gray-200">

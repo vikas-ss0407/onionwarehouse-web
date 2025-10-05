@@ -35,17 +35,17 @@ export default function Billing() {
 
   return (
     <div className="p-8 max-w-4xl mx-auto">
-      <h2 className="text-3xl font-bold mb-6 text-gray-800 border-b pb-2">Generate Bill</h2>
+      <h2 className="text-3xl font-bold mb-6 text-center text-gray-800 border-b pb-2">Generate Bill</h2>
 
       {/* Form Card */}
       <div className="bg-white shadow-md rounded-lg p-6 mb-8">
-        <h3 className="text-xl font-semibold mb-4 text-gray-700">Bill Details</h3>
+        <h3 className="text-xl font-semibold mb-4 text-center text-gray-700">Bill Details</h3>
         <BillingForm boxes={boxes} shops={shops} onAddBill={handleAddBill} />
       </div>
 
       {/* Preview Section */}
       <div className="bg-white shadow-md rounded-lg p-6">
-        <h3 className="text-xl font-semibold mb-4 text-gray-700">Preview</h3>
+        <h3 className="text-xl font-semibold mb-4 text-center text-gray-700">Preview</h3>
         {boxes.length === 0 || shops.length === 0 ? (
           <p className="text-gray-500">Select a box and a shop to preview the bill.</p>
         ) : (

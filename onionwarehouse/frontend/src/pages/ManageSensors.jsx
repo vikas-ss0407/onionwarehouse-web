@@ -24,10 +24,10 @@ export default function ManageSensors() {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Manage Sensors</h1>
+      <h1 className="text-2xl text-center font-bold mb-4">Manage Sensors</h1>
 
       {/* Sensor button */}
-      <div className="flex gap-4 mb-6">
+      <div className="justify-center flex gap-4 mb-6">
         <button
           onClick={handleSensorClick}
           className="px-4 py-2 rounded bg-green-600 text-white"

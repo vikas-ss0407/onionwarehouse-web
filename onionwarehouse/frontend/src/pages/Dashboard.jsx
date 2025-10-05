@@ -73,8 +73,12 @@ export default function Dashboard() {
 
   return (
     <div className="p-6">
+       {/* Main Heading */}
+  <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">
+    Dashboard
+  </h1>
       {/* Navigation Buttons */}
-      <div className="flex flex-wrap gap-4 mb-6">
+      <div className="flex flex-wrap justify-center gap-4 mb-6">
         <button onClick={() => navigate("/manage-sensors")} className="bg-green-600 text-white px-4 py-2 rounded">Manage Sensors</button>
         <button onClick={() => navigate("/manage-shops")} className="bg-indigo-600 text-white px-4 py-2 rounded">Manage Shops</button>
         <button onClick={() => navigate("/manage-boxes")} className="bg-blue-600 text-white px-4 py-2 rounded">Manage Boxes</button>
