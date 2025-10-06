@@ -9,7 +9,6 @@ export default function BoxForm({ onAdd, showList = true }) {
   const [pricePerKg, setPricePerKg] = useState("");
   const [boxes, setBoxes] = useState([]);
 
-  // Fetch boxes only if we want to show the list
   useEffect(() => {
     if (showList) {
       const fetchBoxes = async () => {
