@@ -3,10 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
 // --- Custom Animation Components ---
+
 const DispImages = () => {
     const images = [
-        "/images/bamboo.png",
-        "/images/black mold.jpg",
+        "/images/5.jpg",
+        "/images/dis.jpeg",
         "/images/dis.jpg",
         "/images/darkroom.jpg",
         "/images/bamboo box.jpeg",
@@ -24,16 +25,39 @@ const DispImages = () => {
     }, [images.length]);
 
     const flipVariants = {
-        initial: { rotateY: -90, opacity: 0, scale: 0.8 },
-        animate: { rotateY: 0, opacity: 1, scale: 1 },
-        exit: { rotateY: 90, opacity: 0, scale: 0.8 },
+        initial: { 
+            rotateY: -180, 
+            opacity: 0, 
+            scale: 0.7, 
+            filter: 'brightness(0.5)', 
+            boxShadow: '0px 0px 0px rgba(0,0,0,0)' 
+        },
+        animate: { 
+            rotateY: 0, 
+            opacity: 1, 
+            scale: 1, 
+            filter: 'brightness(1)', 
+            boxShadow: '10px 10px 30px rgba(0,0,0,0.3)' 
+        },
+        exit: { 
+            rotateY: 180, 
+            opacity: 0, 
+            scale: 0.7, 
+            filter: 'brightness(0.5)', 
+            boxShadow: '0px 0px 0px rgba(0,0,0,0)' 
+        },
     };
 
-    const isAlertState = currentImageIndex < 3;
+    const isAlertState = currentImageIndex < 3; 
     const ringColorClass = isAlertState ? 'ring-red-500' : 'ring-green-500';
 
     return (
-        <div className={`relative w-full max-w-[550px] h-[350px] flex items-center justify-center bg-white rounded-3xl shadow-2xl overflow-hidden ring-4 transition-all duration-700 ease-in-out ${ringColorClass}`}>
+        <motion.div 
+            className={`relative w-full max-w-[550px] h-[350px] flex items-center justify-center bg-white rounded-3xl shadow-2xl overflow-hidden ring-4 transition-all duration-700 ease-in-out ${ringColorClass}`}
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut", delay: 0.5 }}
+        >
             <AnimatePresence mode="wait">
                 <motion.img
                     key={currentImageIndex}
@@ -43,16 +67,16 @@ const DispImages = () => {
                     initial="initial"
                     animate="animate"
                     exit="exit"
-                    transition={{ duration: 0.7, ease: "easeInOut" }}
+                    transition={{ duration: 1.0, ease: "easeInOut" }} 
                     className="absolute inset-0 w-full h-full object-cover rounded-3xl"
-                    style={{ transformStyle: "preserve-3d" }}
+                    style={{ transformStyle: "preserve-3d", backfaceVisibility: "hidden" }} 
                 />
             </AnimatePresence>
-        </div>
+        </motion.div>
     );
 };
 
-// Animations for features
+// Animations removed as requested, leaving the components as placeholders
 const AirflowIndicator = () => (
     <div className="absolute bottom-4 left-4 p-1">
         <motion.div
@@ -68,6 +92,7 @@ const AirflowIndicator = () => (
                 ease: "linear"
             }}
         >
+            {/* Empty content */}
         </motion.div>
     </div>
 );
@@ -89,34 +114,68 @@ const LightAlert = () => (
                 ease: "easeInOut",
             }}
         >
-            ⚠️
+            {/* Empty content */}
         </motion.div>
-    </div>
-);
-
-const DashboardPulse = () => (
-    <div className="absolute top-1 right-1 p-1">
-        <motion.div
-            className="w-8 h-8 bg-amber-500 rounded-full shadow-lg shadow-amber-300"
-            animate={{
-                scale: [1, 1.2, 1],
-                opacity: [1, 0.5, 1],
-            }}
-            transition={{
-                duration: 1.5,
-                repeat: Infinity,
-                ease: "easeInOut",
-            }}
-        />
     </div>
 );
 
 // --- Home Component ---
 export default function Home() {
     const navigate = useNavigate();
+    const [activeSection, setActiveSection] = useState('home'); 
 
-    // --- Flow Section (How ShelfPro Works) ---
-    const flowSteps = [
+    const sectionIds = ['home', 'about', 'features', 'contact'];
+
+    // --- EFFECT HOOK FOR INTERSECTION OBSERVER ---
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        setActiveSection(entry.target.id);
+                    }
+                });
+            },
+            {
+                root: null,
+                rootMargin: '-30% 0px -60% 0px', 
+                threshold: 0, 
+            }
+        );
+
+        sectionIds.forEach(id => {
+            const section = document.getElementById(id);
+            if (section) {
+                observer.observe(section);
+            }
+        });
+
+        return () => {
+            sectionIds.forEach(id => {
+                const section = document.getElementById(id);
+                if (section) {
+                    observer.unobserve(section);
+                }
+            });
+        };
+    }, []); 
+
+    const getNavClass = (sectionId) => {
+        const baseClass = "transition-colors duration-300 font-medium text-lg";
+        const inactiveClass = "text-gray-700 hover:text-indigo-600";
+        const activeClass = "text-indigo-600 font-bold border-b-2 border-indigo-600 pb-1"; 
+
+        return `${baseClass} ${activeSection === sectionId ? activeClass : inactiveClass}`;
+    };
+
+    const scrollToSection = (id) => {
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+    };
+
+    // --- Data Definitions (Unchanged) ---
+
+    const workflowSteps = [
         { 
             step: 1, 
             title: "User Login / Signup", 
@@ -139,7 +198,6 @@ export default function Home() {
         },
     ];
 
-    // --- Features Section (Main Features) ---
     const features = [
         { 
             title: "Bamboo Ventilated Crates", 
@@ -161,9 +219,45 @@ export default function Home() {
         }
     ];
 
-    const scrollToSection = (id) => {
-        const el = document.getElementById(id);
-        if (el) el.scrollIntoView({ behavior: "smooth" });
+    // --- Animation Variants ---
+
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.1, 
+                delayChildren: 0.2,   
+            },
+        },
+    };
+
+    const itemVariants = {
+        hidden: { y: 20, opacity: 0, scale: 0.95 },
+        visible: {
+            y: 0,
+            opacity: 1,
+            scale: 1,
+            transition: { type: "spring", stiffness: 100, damping: 10 }
+        },
+    };
+
+    const textVariants = {
+        hidden: { y: 30, opacity: 0 },
+        visible: { 
+            y: 0, 
+            opacity: 1, 
+            transition: { type: "spring", stiffness: 100, damping: 10 } 
+        },
+    };
+
+    const buttonVariants = {
+        hidden: { y: 20, opacity: 0 },
+        visible: { 
+            y: 0, 
+            opacity: 1, 
+            transition: { type: "spring", stiffness: 100, damping: 10, delay: 0.8 } 
+        },
     };
 
     return (
@@ -178,34 +272,70 @@ export default function Home() {
                         ShelfPro Systems
                     </div>
                     <div className="space-x-10 text-lg font-medium text-gray-700 hidden md:flex">
-                        <button onClick={() => scrollToSection("home")} className="hover:text-indigo-600">Home</button>
-                        <button onClick={() => scrollToSection("flow")} className="hover:text-indigo-600">Flow</button>
-                        <button onClick={() => scrollToSection("features")} className="hover:text-indigo-600">Features</button>
-                        <button onClick={() => scrollToSection("about")} className="hover:text-indigo-600">About</button>
+                        <button onClick={() => scrollToSection("home")} className={getNavClass("home")}>Home</button>
+                        <button onClick={() => scrollToSection("about")} className={getNavClass("about")}>About</button> 
+                        <button onClick={() => scrollToSection("features")} className={getNavClass("features")}>Features</button>
+                        <button onClick={() => scrollToSection("contact")} className={getNavClass("contact")}>Contact Us</button> 
                     </div>
                 </div>
             </nav>
 
             {/* Hero Section */}
             <section id="home" className="relative pt-40 pb-20 min-h-screen flex items-center bg-gray-50 overflow-hidden">
-                <motion.div className="max-w-full mx-auto px-10 flex flex-col md:flex-row items-center justify-between w-full"
-                    initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 1 }}
+                <motion.div 
+                    className="max-w-full mx-auto px-10 flex flex-col md:flex-row items-center justify-between w-full"
+                    initial="hidden"
+                    animate="visible"
+                    variants={containerVariants} 
                 >
                     <div className="z-10 text-center md:text-left md:w-1/2 mb-12 md:mb-0 md:pl-10">
-                        <h1 className="text-7xl font-extrabold text-gray-900 mb-6 leading-tight tracking-tighter">
+                        <motion.h1 
+                            className="text-7xl font-extrabold text-gray-900 mb-6 leading-tight tracking-tighter"
+                            variants={textVariants} 
+                        >
                             Smart Storage. <span className="text-indigo-600">Fresh Onions for Longer Time.</span>
-                        </h1>
-                        <p className="text-gray-600 text-2xl mb-10 font-light max-w-xl">
+                        </motion.h1>
+                        <motion.p 
+                            className="text-gray-600 text-2xl mb-10 font-light max-w-xl"
+                            variants={textVariants} 
+                            transition={{ delay: 0.2 }} 
+                        >
                             ShelfPro keeps onions fresh longer by controlling heat, airflow, and light in storage rooms.
-                        </p>
-                        <div className="flex justify-center md:justify-start gap-8 flex-wrap">
-                            <button onClick={() => navigate("/login")} className="bg-indigo-700 hover:bg-indigo-800 text-white px-12 py-4 rounded-full text-xl font-bold shadow-2xl transition-all duration-300 transform hover:scale-105">
-                                Access Dashboard
-                            </button>
-                            <button onClick={() => navigate("/signup")} className="bg-amber-500 hover:bg-amber-600 text-white px-12 py-4 rounded-full text-xl font-bold shadow-2xl transition-all duration-300 transform hover:scale-105">
+                        </motion.p>
+                        <motion.div 
+                            className="flex justify-center md:justify-start gap-8 flex-wrap"
+                            variants={containerVariants} 
+                        >
+                            {/* UPDATED: "Get Started" navigates to /signup */}
+                            <motion.button 
+                                onClick={() => navigate("/signup")} 
+                                className="bg-indigo-700 hover:bg-indigo-800 text-white px-12 py-4 rounded-full text-xl font-bold shadow-2xl transition-all duration-300 transform hover:scale-105"
+                                variants={buttonVariants} 
+                                transition={{ delay: 0.6 }}
+                            >
                                 Get Started
-                            </button>
-                        </div>
+                            </motion.button>
+                            
+                            {/* NEW: Login Button */}
+                            <motion.button 
+                                onClick={() => navigate("/login")} 
+                                className="bg-white hover:bg-gray-100 text-indigo-700 border-2 border-indigo-700 px-12 py-4 rounded-full text-xl font-bold shadow-2xl transition-all duration-300 transform hover:scale-105"
+                                variants={buttonVariants} 
+                                transition={{ delay: 0.7 }}
+                            >
+                                Login
+                            </motion.button>
+
+                            {/* UPDATED: "Learn More" scrolls to #features */}
+                            <motion.button 
+                                onClick={() => scrollToSection("features")} 
+                                className="bg-amber-500 hover:bg-amber-600 text-white px-12 py-4 rounded-full text-xl font-bold shadow-2xl transition-all duration-300 transform hover:scale-105"
+                                variants={buttonVariants} 
+                                transition={{ delay: 0.8 }}
+                            >
+                                Learn More
+                            </motion.button>
+                        </motion.div>
                     </div>
                     <div className="md:w-1/2 flex justify-center z-20 relative p-4">
                         <DispImages />
@@ -213,51 +343,107 @@ export default function Home() {
                 </motion.div>
             </section>
 
-            {/* Flow Section */}
-            <section id="flow" className="py-24 bg-gray-50 px-6">
-                <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="max-w-7xl mx-auto">
-                    <h2 className="text-5xl font-extrabold text-gray-900 text-center mb-16">How ShelfPro Works</h2>
-                    <div className="grid md:grid-cols-4 gap-8 text-center">
-                        {flowSteps.map((step) => (
-                            <motion.div key={step.step} whileHover={{ scale: 1.05 }} className="bg-white p-6 rounded-3xl shadow-2xl border-t-4 border-indigo-500">
+            {/* About ShelfPro & Workflow Section (Combined) */}
+            <section id="about" className="py-24 bg-gray-50 px-6 border-t border-gray-100">
+                <motion.div 
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.3 }} 
+                    variants={containerVariants}
+                    className="max-w-7xl mx-auto"
+                >
+                    <motion.h2 variants={textVariants} className="text-5xl font-extrabold text-gray-900 text-center mb-6">About ShelfPro: Our Vision & Workflow</motion.h2>
+                    <motion.p variants={textVariants} transition={{ delay: 0.1 }} className="text-gray-700 text-xl leading-relaxed text-center mb-16 max-w-4xl mx-auto">
+                        ShelfPro helps farmers and warehouses reduce onion waste by creating the right climate for storage — keeping onions strong, fresh, and ready for market anytime. Our system integrates smart technology with practical storage solutions.
+                    </motion.p>
+
+                    <motion.h3 variants={textVariants} transition={{ delay: 0.2 }} className="text-4xl font-bold text-gray-800 text-center mb-10">System Workflow</motion.h3>
+                    <motion.div variants={containerVariants} className="grid md:grid-cols-4 gap-8 text-center">
+                        {workflowSteps.map((step) => (
+                            <motion.div 
+                                key={step.step} 
+                                variants={itemVariants} 
+                                whileHover={{ scale: 1.05, boxShadow: "0px 15px 30px rgba(0,0,0,0.1)", backgroundColor: 'rgba(238, 242, 255, 1)' }} 
+                                className="bg-white p-6 rounded-3xl shadow-2xl border-t-4 border-indigo-500 transition-colors duration-300"
+                            >
                                 <div className="text-4xl font-bold text-indigo-600 mb-4">{step.step}</div>
-                                <h3 className="text-2xl font-bold mb-2">{step.title}</h3>
+                                <h4 className="text-2xl font-bold mb-2">{step.title}</h4>
                                 <p className="text-gray-600">{step.description}</p>
                             </motion.div>
                         ))}
-                    </div>
+                    </motion.div>
                 </motion.div>
             </section>
 
             {/* Features Section */}
             <section id="features" className="py-24 bg-white px-6 border-t border-b border-gray-100">
-                <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="max-w-7xl mx-auto">
-                    <h2 className="text-5xl font-extrabold text-gray-900 text-center mb-16">Main Features of ShelfPro</h2>
-                    <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                <motion.div 
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.3 }} 
+                    variants={containerVariants}
+                    className="max-w-7xl mx-auto"
+                >
+                    <motion.h2 variants={textVariants} className="text-5xl font-extrabold text-gray-900 text-center mb-16">Main Features of ShelfPro</motion.h2>
+                    <motion.div variants={containerVariants} className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
                         {features.map((feature, index) => (
-                            <motion.div key={index} whileHover={{ scale: 1.05 }} className="relative flex flex-col items-center text-center p-8 bg-gray-50 rounded-3xl shadow-2xl ring-2 ring-indigo-50 hover:ring-indigo-200 transition-all duration-300">
-                                <div className="text-5xl mb-6 p-5 bg-indigo-50 rounded-full shadow-lg">{feature.icon}</div>
+                            <motion.div 
+                                key={index} 
+                                variants={itemVariants} 
+                                whileHover={{ 
+                                    scale: 1.03, 
+                                    boxShadow: "0px 10px 25px rgba(0,0,0,0.1)", 
+                                    backgroundColor: 'rgba(240, 245, 255, 1)',
+                                    // Direct control over ring style for clearer outline
+                                    borderColor: 'rgba(129, 140, 248, 0.5)', 
+                                    borderWidth: '2px' // Increased border for visibility
+                                }} 
+                                className="relative flex flex-col items-center text-center p-8 bg-gray-50 rounded-3xl shadow-2xl ring-2 ring-indigo-50 border-2 border-indigo-100 transition-all duration-300"
+                            >
+                                <motion.div 
+                                    className="text-5xl mb-6 p-5 bg-indigo-50 rounded-full shadow-lg"
+                                    whileHover={{ scale: 1.1, rotate: 5, transition: { type: "spring", stiffness: 300 } }} 
+                                >
+                                    {feature.icon}
+                                </motion.div>
                                 <h3 className="text-2xl font-bold text-gray-900 mb-4">{feature.title}</h3>
                                 <p className="text-gray-600 text-lg">{feature.description}</p>
                                 {feature.animation === 'airflow' && <AirflowIndicator />}
                                 {feature.animation === 'notification' && <LightAlert />}
-                                {feature.animation === 'dashboardPulse' && <DashboardPulse />}
                             </motion.div>
                         ))}
-                    </div>
+                    </motion.div>
                 </motion.div>
             </section>
 
-            {/* About Section */}
-            <section id="about" className="py-24 bg-gray-50 text-center px-6 border-t border-gray-100">
-                <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="max-w-3xl mx-auto">
-                    <h2 className="text-5xl font-extrabold text-gray-900 mb-6">Our Vision: Longer Life for Every Onion</h2>
-                    <p className="text-gray-700 text-xl leading-relaxed mb-10">
-                        ShelfPro helps farmers and warehouses reduce onion waste by creating the right climate for storage — keeping onions strong, fresh, and ready for market anytime.
-                    </p>
-                    <button className="bg-indigo-700 hover:bg-indigo-800 text-white px-12 py-5 rounded-full text-xl font-bold shadow-2xl transition-all duration-300 transform hover:scale-105">
-                        Request Setup
-                    </button>
+            {/* Contact Us Section */}
+            <section id="contact" className="py-24 bg-indigo-700 text-white text-center px-6">
+                <motion.div 
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.3 }} 
+                    variants={containerVariants}
+                    className="max-w-3xl mx-auto"
+                >
+                    <motion.h2 variants={textVariants} className="text-5xl font-extrabold mb-6">Ready to Optimize Your Storage?</motion.h2>
+                    <motion.p variants={textVariants} transition={{ delay: 0.1 }} className="text-indigo-100 text-xl leading-relaxed mb-10">
+                        Connect with us to discuss your warehouse needs, request a system demo, or get a personalized quote for implementing ShelfPro Systems.
+                    </motion.p>
+                    <motion.button 
+                        className="bg-amber-400 hover:bg-amber-500 text-indigo-900 px-12 py-5 rounded-full text-xl font-bold shadow-2xl transition-all duration-300 transform hover:scale-105"
+                        variants={buttonVariants}
+                        transition={{ delay: 0.3 }}
+                    >
+                        Contact Sales Team
+                    </motion.button>
+                    <motion.div 
+                        variants={containerVariants} 
+                        className="mt-8 text-indigo-300 text-lg"
+                        transition={{ staggerChildren: 0.1, delayChildren: 0.4 }}
+                    >
+                        <motion.p variants={textVariants}>📧 support@shelfpro.com</motion.p>
+                        <motion.p variants={textVariants}>📞 +1 (555) ShelfPro</motion.p>
+                    </motion.div>
                 </motion.div>
             </section>
         </div>

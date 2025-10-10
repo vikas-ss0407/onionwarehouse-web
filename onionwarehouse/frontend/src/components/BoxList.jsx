@@ -1,35 +1,11 @@
 import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion"; // Add motion for smooth transitions
 
 export default function BoxList({ boxes, onRemove, onEdit, onUpdateAlert }) {
-  const [editId, setEditId] = useState(null);
-  const [editBoxNumber, setEditBoxNumber] = useState("");
-  const [editType, setEditType] = useState("");
-  const [editQuantity, setEditQuantity] = useState("");
-  const [editPricePerKg, setEditPricePerKg] = useState("");
+  // Remove edit-related states (editId, editBoxNumber, etc.)
   const [activeAlertBox, setActiveAlertBox] = useState(null); // popup state
 
-  const startEdit = (box) => {
-    setEditId(box._id);
-    setEditBoxNumber(box.boxNumber);
-    setEditType(box.type);
-    setEditQuantity(box.quantity);
-    setEditPricePerKg(box.pricePerKg || "");
-  };
-
-  const submitEdit = (id) => {
-    if (!editBoxNumber || !editType || !editQuantity || !editPricePerKg) {
-      alert("Fill all fields");
-      return;
-    }
-    onEdit({
-      _id: id,
-      boxNumber: editBoxNumber,
-      type: editType,
-      quantity: Number(editQuantity),
-      pricePerKg: Number(editPricePerKg),
-    });
-    setEditId(null);
-  };
+  // We can remove startEdit/submitEdit since editing is moved to a modal
 
   const formatDateTime = (dateString) => {
     const date = new Date(dateString);
@@ -39,7 +15,7 @@ export default function BoxList({ boxes, onRemove, onEdit, onUpdateAlert }) {
   const today = new Date();
 
   if (!boxes || boxes.length === 0) {
-    return <p className="text-gray-600">No boxes available</p>;
+    return <p className="text-gray-600 text-center text-lg py-10">No boxes available. Click "+ Add Box" to get started.</p>;
   }
 
   return (
@@ -58,23 +34,26 @@ export default function BoxList({ boxes, onRemove, onEdit, onUpdateAlert }) {
         );
 
         return (
-          <div
+          <motion.div
             key={box._id}
-            className="bg-white rounded shadow-md w-80 transition transform hover:scale-105 relative"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3 }}
+            className="bg-white rounded-xl shadow-lg w-80 transition transform hover:scale-[1.02] relative border border-gray-100"
           >
             {/* Notification Symbol */}
             {alertToNotify && (
               <div
                 onClick={() => setActiveAlertBox(box)}
-                className="absolute top-2 right-2 w-6 h-6 bg-red-500 text-white flex items-center justify-center rounded-full cursor-pointer"
-                title="Maintenance Alert"
+                className="absolute top-3 right-3 w-7 h-7 bg-red-600 text-white flex items-center justify-center rounded-full cursor-pointer shadow-lg z-10 animate-pulse"
+                title="Maintenance Alert - Click to view"
               >
-                !
+                🚨
               </div>
             )}
 
             {/* Image container */}
-            <div className="aspect-square w-full overflow-hidden rounded-t">
+            <div className="h-48 w-full overflow-hidden rounded-t-xl">
               <img
                 src={imageSrc}
                 alt={box.type}
@@ -83,112 +62,94 @@ export default function BoxList({ boxes, onRemove, onEdit, onUpdateAlert }) {
             </div>
 
             {/* Box info */}
-            <div className="p-3 border-t space-y-2">
-              <p className="font-semibold text-lg">
-                Box Number: {box.boxNumber}
+            <div className="p-4 space-y-2">
+              <p className="font-extrabold text-xl text-indigo-700 border-b pb-1">
+                Box: {box.boxNumber}
               </p>
-              <p>
-                <strong>Type:</strong>{" "}
-                {editId === box._id ? (
-                  <select
-                    value={editType}
-                    onChange={(e) => setEditType(e.target.value)}
-                    className="p-1 border rounded w-full"
-                  >
-                    <option value="">-- Select Onion Type --</option>
-                    <option value="Bulb Onion">Bulb Onion</option>
-                    <option value="Shallot Onion">Shallot Onion</option>
-                  </select>
-                ) : (
-                  box.type
-                )}
+              <p className="text-base">
+                <strong>Type:</strong> {box.type}
               </p>
-              <p>
-                <strong>Quantity (kg):</strong>{" "}
-                {editId === box._id ? (
-                  <input
-                    type="number"
-                    value={editQuantity}
-                    onChange={(e) => setEditQuantity(e.target.value)}
-                    className="p-1 border rounded w-full"
-                  />
-                ) : (
-                  box.quantity
-                )}
+              <p className="text-base">
+                <strong>Quantity:</strong> <span className="font-medium text-gray-700">{box.quantity} kg</span>
               </p>
-              <p>
-                <strong>Price per kg:</strong> ₹ {box.pricePerKg}
+              <p className="text-base">
+                <strong>Price/kg:</strong> <span className="font-medium text-gray-700">₹ {box.pricePerKg}</span>
               </p>
-              <p>
-                <strong>Created At:</strong> {formatDateTime(box.createdAt)}
+              <p className="text-xs text-gray-500 pt-1">
+                Created At: {formatDateTime(box.createdAt)}
               </p>
 
               {/* Buttons */}
-              <div className="flex gap-2 mt-2">
-                {editId === box._id ? (
-                  <button
-                    onClick={() => submitEdit(box._id)}
-                    className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm"
-                  >
-                    Save
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => startEdit(box)}
-                    className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm"
-                  >
-                    Edit
-                  </button>
-                )}
-
+              <div className="flex gap-3 pt-3 border-t">
+                <button
+                  onClick={() => onEdit(box)} // Calls parent to open edit modal
+                  className="flex-1 bg-blue-500 text-white px-3 py-2 rounded-lg hover:bg-blue-600 text-sm font-semibold transition"
+                >
+                  ✏️ Edit
+                </button>
                 <button
                   onClick={() => onRemove(box._id)}
-                  className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm"
+                  className="flex-1 bg-red-500 text-white px-3 py-2 rounded-lg hover:bg-red-600 text-sm font-semibold transition"
                 >
-                  Remove
+                  🗑️ Remove
                 </button>
               </div>
             </div>
 
-            {/* Alert Popup */}
-            {activeAlertBox && activeAlertBox._id === box._id && alertToNotify && (
-              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                <div className="bg-white p-6 rounded shadow-lg w-96">
-                  <h3 className="text-lg font-bold mb-4">Maintenance Alert</h3>
-                  <p>
-                    Box <strong>{box.boxNumber}</strong> needs maintenance for{" "}
-                    {alertToNotify.days}-day schedule.
-                  </p>
-                  <div className="flex gap-4 mt-4 justify-end">
-                    <button
-                      onClick={() => {
-                        onUpdateAlert(box._id, alertToNotify.days, "completed");
-                        setActiveAlertBox(null);
-                      }}
-                      className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-                    >
-                      Completed
-                    </button>
-                    <button
-                      onClick={() => {
-                        onUpdateAlert(box._id, alertToNotify.days, "remind");
-                        setActiveAlertBox(null);
-                      }}
-                      className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
-                    >
-                      Remind me in 1 day
-                    </button>
-                    <button
-                      onClick={() => setActiveAlertBox(null)}
-                      className="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400"
-                    >
-                      Close
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
+            {/* Alert Popup (now using AnimatePresence) */}
+            <AnimatePresence>
+              {activeAlertBox && activeAlertBox._id === box._id && alertToNotify && (
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+                  onClick={() => setActiveAlertBox(null)} // Close on overlay click
+                >
+                  <motion.div
+                    initial={{ scale: 0.8 }}
+                    animate={{ scale: 1 }}
+                    exit={{ scale: 0.8 }}
+                    transition={{ duration: 0.2 }}
+                    className="bg-white p-6 rounded-xl shadow-2xl w-full max-w-sm"
+                    onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
+                  >
+                    <h3 className="text-xl font-bold mb-4 text-red-600 border-b pb-2">Maintenance Alert</h3>
+                    <p className="text-gray-700 mb-4">
+                      Box <strong>{box.boxNumber}</strong> is due for the{" "}
+                      <span className="font-semibold">{alertToNotify.days}-day</span> maintenance schedule.
+                    </p>
+                    <div className="flex flex-col gap-3 mt-4">
+                      <button
+                        onClick={() => {
+                          onUpdateAlert(box._id, alertToNotify.days, "completed");
+                          setActiveAlertBox(null);
+                        }}
+                        className="bg-green-500 text-white px-4 py-3 rounded-lg hover:bg-green-600 font-semibold transition"
+                      >
+                        ✅ Mark as Completed
+                      </button>
+                      <button
+                        onClick={() => {
+                          onUpdateAlert(box._id, alertToNotify.days, "remind");
+                          setActiveAlertBox(null);
+                        }}
+                        className="bg-yellow-500 text-white px-4 py-3 rounded-lg hover:bg-yellow-600 font-semibold transition"
+                      >
+                        🔔 Remind me in 1 day
+                      </button>
+                      <button
+                        onClick={() => setActiveAlertBox(null)}
+                        className="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 font-semibold transition"
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </motion.div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
         );
       })}
     </div>
