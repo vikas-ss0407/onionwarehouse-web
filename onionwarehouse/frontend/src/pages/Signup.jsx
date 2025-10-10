@@ -66,10 +66,10 @@ export default function Signup() {
       className="flex justify-between items-center h-[100vh] px-10 bg-cover bg-center"
       style={{ backgroundImage: "url('/images/signup2.jpeg')" }}
     >
-      
-      <div className="hidden md:block w-1/2 p-10 bg-gray-800 bg-opacity-40 rounded-lg text-gray-100">
+      {/* Left-side description container with white background */}
+      <div className="hidden md:block w-1/2 p-10 bg-white rounded-lg text-gray-900 shadow-lg">
         <h1 className="text-4xl font-bold mb-6">Create Your Account</h1>
-        <p className="mb-4 text-lg text-gray-200">
+        <p className="mb-4 text-lg">
           Join to efficiently manage your warehouse by monitoring environmental conditions and managing inventory and billing. Please follow the
           guidelines below:
         </p>
@@ -86,7 +86,7 @@ export default function Signup() {
         </ul>
       </div>
 
-      
+      {/* Signup Form */}
       <form
         className="bg-white bg-opacity-90 p-10 rounded-lg shadow-lg w-96 md:w-[28rem]"
         onSubmit={handleSignup}
