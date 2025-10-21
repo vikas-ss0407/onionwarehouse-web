@@ -2,6 +2,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import Cookies from "js-cookie";
+import { motion } from "framer-motion";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -39,11 +40,16 @@ export default function Navbar() {
   const pageTitle = routeTitles[location.pathname] || "";
 
   return (
-    <nav className="bg-indigo-700 text-white p-4 flex justify-end items-center shadow-lg relative">
+    <motion.nav
+      className="bg-indigo-700 text-white p-4 flex justify-end items-center shadow-lg relative sticky top-0 z-50 backdrop-blur-sm"
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
+    >
       {/* Dynamic title */}
       <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
         <span className="text-2xl font-black tracking-wider">
-          ShelfPro {pageTitle}
+          OnionGuard {pageTitle}
         </span>
       </div>
 
@@ -74,6 +80,6 @@ export default function Navbar() {
           </div>
         )}
       </div>
-    </nav>
+    </motion.nav>
   );
 }

@@ -174,13 +174,13 @@ export default function ManageShops() {
       return (
         <tr className="bg-white">
           <td colSpan={5} className="text-center py-6 text-gray-500">
-            No shops found. Click "Add New Shop" to get started.
+            No shops found. Click the '+' button to get started.
           </td>
         </tr>
       );
     }
 
-    // Actual data rows: INCREASED text size from text-sm/text-base to text-base/text-lg
+    // Actual data rows: Using text-base for standard table text size
     return shops.map((shop, index) => (
       <motion.tr 
         key={shop._id} 
@@ -189,10 +189,19 @@ export default function ManageShops() {
         transition={{ delay: index * 0.05 }}
         className={index % 2 === 0 ? "bg-white hover:bg-gray-50 transition duration-150" : "bg-gray-50 hover:bg-white transition duration-150"}
       >
+        {/* Shop Name: font-semibold, text-gray-800 - OK */}
         <td className="p-3 font-semibold text-base text-gray-800">{shop.name}</td>
-        <td className="p-3 text-base text-gray-600">{shop.address}</td>
+        
+        {/* FIX: Address - Updated to text-gray-800 and font-medium */}
+        <td className="p-3 text-base text-gray-800 font-medium">{shop.address}</td>
+        
+        {/* Phone: text-indigo-600, font-medium (as a link) - OK */}
         <td className="p-3 text-base text-indigo-600 font-medium">{shop.phone}</td>
-        <td className="p-3 text-base text-gray-700">{shop.fssai}</td>
+        
+        {/* FIX: FSSAI - Updated to text-gray-800 and font-medium */}
+        <td className="p-3 text-base text-gray-800 font-medium">{shop.fssai}</td>
+        
+        {/* Actions - OK */}
         <td className="p-3 space-x-3 whitespace-nowrap text-center">
           <button
             onClick={() => openEditModal(shop)}
@@ -217,34 +226,17 @@ export default function ManageShops() {
   return (
     <div className="min-h-screen bg-gray-50 p-6 md:p-10">
       
-      {/* UPDATED HEADER and ADD BUTTON Container with sticky positioning */}
-      <div className="
-            max-w-6xl mx-auto mb-8 
-            sticky top-0 z-50 
-            bg-gray-50/90 backdrop-blur-sm 
-            py-4 border-b-4 border-indigo-100/70
-        "> 
-          <div className="text-center mb-6">
-            <h1 className="text-4xl font-extrabold text-gray-900 mb-2">🏪 Shop Inventory Management</h1>
-            <p className="text-lg text-gray-500">Add, view, and modify all registered shops in the system.</p>
-          </div>
-
-          {/* Button aligned to the right edge of the header container, which is now the same width as the table */}
-          <div className="flex justify-end"> 
-            <button
-              onClick={openAddModal}
-              className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl text-lg font-semibold shadow-xl transition duration-300 transform hover:scale-[1.02]"
-            >
-              ➕ Add New Shop
-            </button>
-          </div>
+      {/* FIX: Reintroducing a centered title block to fill the gap at the top */}
+      <div className="text-center mb-10 pt-4">
+        <h1 className="text-3xl font-extrabold text-gray-800">Manage Retail Shops</h1>
+        <p className="text-lg text-gray-500 mt-1">Add, update, or remove shop details from the system.</p>
       </div>
       
-      {/* SHOPS TABLE CARD */}
+      {/* SHOPS TABLE CARD (Content remains centered and sized) */}
       <div className="bg-white p-6 rounded-xl shadow-2xl overflow-x-auto border border-gray-100 max-w-6xl mx-auto">
         <table className="min-w-full table-auto">
           <thead>
-            <tr className="bg-indigo-50 text-indigo-800 uppercase text-base leading-normal shadow-md rounded-lg"> {/* Increased header font size */}
+            <tr className="bg-indigo-50 text-indigo-800 uppercase text-base leading-normal shadow-md rounded-lg"> 
               <th className="p-3 text-left rounded-tl-xl">Shop Name</th>
               <th className="p-3 text-left">Address</th>
               <th className="p-3 text-left">Phone</th>
@@ -258,6 +250,40 @@ export default function ManageShops() {
         </table>
       </div>
       
+      {/* FLOATING ADD SHOP BUTTON (FAB) with Tooltip */}
+        <div className="fixed bottom-6 right-6 z-40 group flex items-center">
+            {/* Tooltip text: Using explicit font size and bold to ensure visibility */}
+            <div
+                className="
+                    bg-gray-800 text-white text-base font-bold py-3 px-4 rounded-lg shadow-xl 
+                    mr-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300
+                    pointer-events-none whitespace-nowrap
+                "
+            >
+                Add New Shop
+            </div>
+
+            {/* The Floating Action Button */}
+            <motion.button
+                onClick={openAddModal}
+                className="
+                    p-4 rounded-full bg-indigo-600 text-white shadow-2xl 
+                    hover:bg-indigo-700 transition duration-300 transform hover:scale-110 
+                    focus:outline-none focus:ring-4 focus:ring-indigo-300
+                "
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                aria-label="Add New Shop"
+            >
+                {/* The icon provides the 'symbol' */}
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-plus">
+                    <path d="M5 12h14"/>
+                    <path d="M12 5v14"/>
+                </svg>
+            </motion.button>
+        </div>
+
       {/* MODAL FORM */}
       <AnimatePresence>
         <Modal 

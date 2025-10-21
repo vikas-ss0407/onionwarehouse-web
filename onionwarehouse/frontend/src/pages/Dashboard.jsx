@@ -256,29 +256,13 @@ export default function Dashboard() {
 
 
     return (
-        <div className="min-h-screen bg-gray-50 pb-10 px-4 md:px-10">
-
-            {/* REMOVED: <div className="h-2"></div> */}
-
-            {/* UPDATED: Dashboard Heading with sticky positioning
-                - Removed pt-16 from the main container and moved all vertical spacing responsibility here.
-                - py-4 ensures there is still vertical padding within the sticky header itself.
-            */}
-            <motion.h1
-                className="
-                    text-5xl font-extrabold text-indigo-700 text-center mb-6 tracking-tight 
-                    sticky top-0 z-50 bg-gray-50/90 backdrop-blur-sm py-4 border-b-4 border-indigo-100/70
-                "
-                initial={{ opacity: 0, y: -50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
-            >
-                ShelfPro Dashboard
-            </motion.h1>
+        // Changed to a clearly visible pale indigo background (bg-indigo-50) for contrast.
+        <div className="min-h-screen bg-indigo-50 pb-10 px-4 md:px-10">
 
             {/* Navigation Buttons - reduced mb-10 to mb-8 for less vertical space */}
             <motion.div
-                className="flex flex-wrap justify-center gap-4 mb-8"
+                className="flex flex-wrap justify-center gap-4 mt-8 mb-8" 
+                // Added mt-8 to provide space from the top, assuming the external navbar is at the very top.
                 initial={{ y: -20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.2 }}

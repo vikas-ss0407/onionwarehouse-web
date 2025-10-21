@@ -118,7 +118,7 @@ const galleryItems = [
     title: "UI Dashboard Prototype",
     description:
       "The digital interface for real-time data visualization, inventory management, automated alerts, and detailed historical reporting.",
-    imagePath: "/images/ui_prototype.png", // PLACEHOLDER
+    imagePath: "/images/uiproto.png", // PLACEHOLDER
     icon: Monitor,
     color: ACCENT_COLOR_BASE, 
   },
@@ -571,9 +571,8 @@ export default function Home() {
               Profit.
             </motion.h1>
             <motion.p
-              // Text color for hero paragraph is a slightly lighter dark blue/gray
-              className={`text-xl mb-10 font-light max-w-xl`}
-              style={{ color: NEW_BLUE_700 }}
+              className="text-xl mb-10 font-semibold max-w-xl text-gray-600 tracking-tight"
+              style={{ fontFamily: 'Inter, Arial, sans-serif' }}
               variants={textVariants}
               transition={{ delay: 0.2 }}
             >

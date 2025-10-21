@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getBoxes, updateBox, deleteBox, createBox } from "../api/boxes";
+// Assuming you have these components:
 import BoxList from "../components/BoxList";
-import BoxForm from "../components/BoxForm";
+import BoxForm from "../components/BoxForm"; 
 import { motion, AnimatePresence } from "framer-motion";
+import { PlusCircle } from 'lucide-react'; 
 
+// ----------------------------------------------------------------------
 // --- Modal Component (Kept Separately for Clarity) ---
+// ----------------------------------------------------------------------
 const Modal = ({ isOpen, onClose, children, title }) => {
   if (!isOpen) return null;
 
@@ -36,7 +40,9 @@ const Modal = ({ isOpen, onClose, children, title }) => {
   );
 };
 
+// ----------------------------------------------------------------------
 // --- Main ManageBoxes Component ---
+// ----------------------------------------------------------------------
 
 export default function ManageBoxes() {
   const [boxes, setBoxes] = useState([]);
@@ -190,40 +196,7 @@ export default function ManageBoxes() {
   return (
     <div className="min-h-screen bg-gray-50 p-6 md:p-10">
       
-        {/*
-            FIXED STICKY HEADER
-            - sticky top-0 ensures it sticks flush to the top.
-            - -mx-6 md:-mx-10 cancels out the parent's padding, allowing the background to span the full content width.
-            - Removed pt-4 to close the transparent gap.
-        */}
-      <div className="
-          sticky top-0 z-50 
-          -mx-6 md:-mx-10 
-          mb-4 
-      ">
-            <div className="
-                bg-gray-50/90 backdrop-blur-sm 
-                py-4 border-b-4 border-indigo-100/70 
-                px-6 md:px-10
-            ">
-                {/* Content inside the sticky bar is limited to the max-w-7xl width and centered */}
-                <div className="max-w-7xl mx-auto flex justify-between items-center">
-                    <h2 className="text-4xl font-extrabold text-gray-900">📦 Manage Inventory Boxes</h2>
-
-                    {/* Add Box button */}
-                    <button
-                        onClick={openAddModal}
-                        className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl text-lg font-semibold shadow-xl transition duration-300 transform hover:scale-[1.02]"
-                    >
-                        + Add New Box
-                    </button>
-                </div>
-            </div>
-        </div>
-
-      {/* FIXED MAIN CONTENT CONTAINER
-            - w-full ensures it fills the horizontal space left by the sticky bar, allowing BoxList to expand.
-        */}
+        {/* MAIN CONTENT CONTAINER */}
       <div className="w-full">
         
         {/* Loading State */}
@@ -246,6 +219,40 @@ export default function ManageBoxes() {
           </div>
         )}
       </div>
+
+        {/* FLOATING ADD BOX BUTTON (FAB) with Tooltip - FINAL ADJUSTMENT */}
+        <div className="fixed bottom-6 right-6 z-40 group flex items-center">
+            {/* Tooltip text: Using arbitrary value [font-size:18px] and font-bold for guarantee visibility. */}
+            <div
+                className="
+                    bg-gray-800 text-white **[font-size:18px]** **font-bold** py-3 px-4 rounded-lg shadow-xl 
+                    mr-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300
+                    pointer-events-none whitespace-nowrap
+                "
+            >
+                Add Boxes
+            </div>
+
+            {/* The Floating Action Button */}
+            <motion.button
+                onClick={openAddModal}
+                className="
+                    p-4 rounded-full bg-indigo-600 text-white shadow-2xl 
+                    hover:bg-indigo-700 transition duration-300 transform hover:scale-110 
+                    focus:outline-none focus:ring-4 focus:ring-indigo-300
+                "
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                aria-label="Add New Box"
+            >
+                {/* The icon provides the 'symbol' */}
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-plus">
+                    <path d="M5 12h14"/>
+                    <path d="M12 5v14"/>
+                </svg>
+            </motion.button>
+        </div>
 
       {/* MODAL FORM */}
       <AnimatePresence>
