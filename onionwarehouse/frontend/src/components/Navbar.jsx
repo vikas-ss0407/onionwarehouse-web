@@ -1,10 +1,11 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import Cookies from "js-cookie";
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [user, setUser] = useState(null);
   const [open, setOpen] = useState(false);
 
@@ -22,22 +23,41 @@ export default function Navbar() {
     navigate("/profile");
   };
 
+  // Map routes to display titles
+  const routeTitles = {
+    "/dashboard": "Dashboard",
+    "/manage-shops": "Manage Shops",
+    "/manage-boxes": "Manage Boxes",
+    "/addbox": "Add Box",
+    "/billing": "Billing",
+    "/print-bill": "Print Bill",
+    "/manage-sensors": "Manage Sensors",
+    "/profile": "Profile",
+  };
+
+  // Get the title based on the current path
+  const pageTitle = routeTitles[location.pathname] || "";
+
   return (
-    // CHANGE: Changed bg-green-700 to bg-indigo-700 for branding consistency
     <nav className="bg-indigo-700 text-white p-4 flex justify-end items-center shadow-lg relative">
-      {/* CHANGE: Added ShelfPro title to the left */}
+      {/* Dynamic title */}
       <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-        <span className="text-2xl font-black tracking-wider">ShelfPro System</span>
+        <span className="text-2xl font-black tracking-wider">
+          ShelfPro {pageTitle}
+        </span>
       </div>
 
+      {/* User menu */}
       <div className="relative">
-        <button onClick={() => setOpen(!open)} className="flex items-center gap-2 hover:bg-indigo-600 p-2 rounded transition-colors duration-200">
+        <button
+          onClick={() => setOpen(!open)}
+          className="flex items-center gap-2 hover:bg-indigo-600 p-2 rounded transition-colors duration-200"
+        >
           <FaUserCircle size={28} />
           <span className="font-semibold">{user ? user.name : "Guest"}</span>
         </button>
 
         {open && (
-          // CHANGE: Adjusted dropdown styling for a softer look
           <div className="absolute right-0 mt-3 bg-white text-gray-800 rounded-lg shadow-xl w-40 z-50 overflow-hidden">
             <button
               onClick={goToProfile}
