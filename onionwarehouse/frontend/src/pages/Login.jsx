@@ -13,7 +13,7 @@ export default function Login() {
     try {
       const res = await login({ email, password });
       if (res.user) {
-        Cookies.set("user", JSON.stringify(res.user), { expires: 1 });
+        Cookies.set("user", JSON.stringify(res.user)); // ✅ session cookie
         alert("Logged in successfully");
         navigate("/dashboard");
       } else {
@@ -30,7 +30,7 @@ export default function Login() {
       className="flex justify-between items-center h-[100vh] px-10 bg-cover bg-center"
       style={{ backgroundImage: "url('/images/login2.jpeg')" }}
     >
-      {/* Left side - Welcome section with white background (OnionGuard Added) */}
+      {/* Left side - Welcome section with white background */}
       <div className="hidden md:block w-1/2 p-12 bg-white bg-opacity-90 rounded-xl text-gray-900 shadow-lg">
         <h1 className="text-5xl font-bold mb-6">Welcome Back</h1>
         <p className="text-xl leading-relaxed mb-6">
@@ -38,11 +38,13 @@ export default function Login() {
         </p>
         <div className="mt-8 p-4 bg-green-100 border-l-4 border-green-500 text-green-800 rounded">
           <p className="font-semibold text-lg">🔒 Secured by OnionGuard</p>
-          <p className="text-base">Your data security is our priority. Log in with confidence knowing your credentials are protected by OnionGuard multi-layered encryption protocol.</p>
+          <p className="text-base">
+            Your data security is our priority. Log in with confidence knowing your credentials are protected by OnionGuard multi-layered encryption protocol.
+          </p>
         </div>
       </div>
 
-      {/* Right side - Login form (New User Signup Added) */}
+      {/* Right side - Login form */}
       <form
         className="bg-white bg-opacity-90 p-10 rounded-lg shadow-lg w-96 md:w-[28rem]"
         onSubmit={handleLogin}
@@ -78,7 +80,7 @@ export default function Login() {
           New user?{" "}
           <button
             type="button"
-            onClick={() => navigate("/signup")} // Assuming a '/signup' route
+            onClick={() => navigate("/signup")}
             className="text-green-700 font-semibold hover:text-green-800 focus:outline-none"
           >
             Sign up
@@ -89,7 +91,7 @@ export default function Login() {
         <button
           type="button"
           onClick={() => navigate(-1)}
-          className="w-full bg-gray-200 text-gray-700 p-3 rounded-lg hover:bg-gray-300 text-lg transition duration-200"
+          className="w-full bg-gray-400 text-gray-700 p-3 rounded-lg hover:bg-gray-300 text-lg transition duration-200"
         >
           ← Go Back
         </button>

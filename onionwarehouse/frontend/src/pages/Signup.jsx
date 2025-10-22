@@ -161,7 +161,7 @@ export default function Signup() {
         <button
           type="button"
           onClick={() => navigate(-1)}
-          className="w-full bg-gray-200 text-gray-700 p-3 rounded-lg hover:bg-gray-300 text-lg transition duration-200"
+          className="w-full bg-gray-400 text-gray-700 p-3 rounded-lg hover:bg-gray-300 text-lg transition duration-200"
         >
           ← Go Back
         </button>
