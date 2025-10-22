@@ -13,24 +13,29 @@ import {
 } from "recharts";
 import { motion, AnimatePresence } from "framer-motion";
 
-// --- Utility Components (StatCard - Adjusted to handle null data) ---
-const StatCard = ({ title, value, unit, status = null, statusColorClass = null, rawValue = null, icon }) => (
+// --- Utility Components (StatCard - Adjusted for BIG Color Change) ---
+const StatCard = ({ title, value, unit, status = null, statusColorClass = null, bgColorClass = null, rawValue = null, icon }) => (
     <motion.div
-        className="bg-white p-6 rounded-xl shadow-lg border-t-4 border-indigo-500 hover:shadow-2xl transition duration-300 transform hover:-translate-y-1"
+        // 💡 MAJOR CHANGE: Replaced fixed 'bg-white' and 'border-t-4' with dynamic bgColorClass.
+        // Also added dynamic text color via bgColorClass for better contrast.
+        className={`${bgColorClass || 'bg-white border-t-4 border-indigo-500'} p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-1`}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
     >
         <div className="flex items-center justify-between mb-2">
-            <p className="text-sm font-medium text-gray-500 uppercase">{title}</p>
-            <div className="text-2xl text-indigo-600">{icon}</div>
+            {/* 💡 CHANGE: Use white text for status card titles, except for yellow background */}
+            <p className={`text-sm font-medium uppercase ${bgColorClass && bgColorClass !== 'bg-yellow-500' ? 'text-indigo-100' : 'text-gray-500'}`}>{title}</p>
+            {/* 💡 CHANGE: Use white/dark color for icon */}
+            <div className={`text-2xl ${bgColorClass && bgColorClass !== 'bg-yellow-500' ? 'text-white' : 'text-indigo-600'}`}>{icon}</div>
         </div>
 
         <div className="flex items-baseline justify-between mt-3">
             {/* Fallback to '---' if value is null */}
-            <p className="text-4xl font-extrabold text-gray-900 leading-none">
+            {/* 💡 CHANGE: Use white/dark color for large value */}
+            <p className={`text-4xl font-extrabold leading-none ${bgColorClass && bgColorClass !== 'bg-yellow-500' ? 'text-white' : 'text-gray-900'}`}>
                 {value === null ? '---' : value}
-                {unit && <span className="text-xl font-medium text-gray-600 ml-1">{unit}</span>}
+                <span className={`text-xl font-medium ml-1 ${bgColorClass && bgColorClass !== 'bg-yellow-500' ? 'text-indigo-200' : 'text-gray-600'}`}>{unit}</span>
             </p>
 
             {status && (
@@ -39,11 +44,12 @@ const StatCard = ({ title, value, unit, status = null, statusColorClass = null, 
                 </span>
             )}
         </div>
-        {rawValue && <p className="mt-2 text-xs text-gray-400">Raw: {rawValue}</p>}
+        {/* 💡 CHANGE: Use white/dark color for raw value */}
+        {rawValue && <p className={`mt-2 text-xs ${bgColorClass && bgColorClass !== 'bg-yellow-500' ? 'text-indigo-200' : 'text-gray-400'}`}>Raw: {rawValue}</p>}
     </motion.div>
 );
 
-// --- Mini-Graph Component (Handles no history data) ---
+// --- Mini-Graph Component (No Change) ---
 const MiniGraphCard = ({ graph, history, onClick }) => {
     // Check if history has enough points to draw a line
     const hasHistory = history && history.length > 1;
@@ -85,7 +91,7 @@ const MiniGraphCard = ({ graph, history, onClick }) => {
 };
 
 
-// --- Detailed Graph Content Component (For use in the Modal - Unchanged) ---
+// --- Detailed Graph Content Component (No Change) ---
 const DetailedGraphContent = ({ graph, history }) => (
     <div className="w-full h-[400px]">
         <h3 className="text-2xl font-bold text-gray-700 mb-6 flex items-center">
@@ -133,7 +139,7 @@ const DetailedGraphContent = ({ graph, history }) => (
 );
 
 
-// --- Modal Component (Unchanged) ---
+// --- Modal Component (No Change) ---
 const Modal = ({ isOpen, onClose, children }) => {
     if (!isOpen) return null;
 
@@ -229,7 +235,7 @@ export default function Dashboard() {
 
     const currentGraphDetail = graphs.find(g => g.key === modalGraphKey);
 
-    // --- Modal Handlers ---
+    // --- Modal Handlers (No Change) ---
     const openModal = (key) => {
         setModalGraphKey(key);
         setIsModalOpen(true);
@@ -239,7 +245,7 @@ export default function Dashboard() {
         setModalGraphKey(null);
     };
 
-    // Calculated Statuses for Stat Cards
+    // Calculated Statuses for Stat Cards (No Change)
     const tempValue = data?.temperature;
     const tempStatus = tempValue > 30 ? "HOT" : (tempValue < 10 ? "COLD" : "NORMAL");
     const tempStatusColor = tempValue > 30 ? "bg-red-100 text-red-700" : (tempValue < 10 ? "bg-blue-100 text-blue-700" : "bg-green-100 text-green-700");
@@ -254,15 +260,19 @@ export default function Dashboard() {
     const fanStatus = data?.temperature > 30 ? "ON" : "OFF";
     const fanStatusColor = fanStatus === "ON" ? "bg-green-100 text-green-700" : "bg-gray-200 text-gray-700";
 
+    // 💡 NEW LOGIC: Dynamic background color for the System Status card
+    const systemStatusBgColor = sensorOn
+        ? (data ? "bg-green-600" : "bg-yellow-500") // Online: Green for data, Yellow for fetching
+        : "bg-red-600"; // Offline: Red
+
+    // The text color will be controlled inside StatCard based on this background
 
     return (
-        // Changed to a clearly visible pale indigo background (bg-indigo-50) for contrast.
         <div className="min-h-screen bg-indigo-50 pb-10 px-4 md:px-10">
 
-            {/* Navigation Buttons - reduced mb-10 to mb-8 for less vertical space */}
+            {/* Navigation Buttons */}
             <motion.div
-                className="flex flex-wrap justify-center gap-4 mt-8 mb-8" 
-                // Added mt-8 to provide space from the top, assuming the external navbar is at the very top.
+                className="flex flex-wrap justify-center gap-4 mt-8 mb-8"
                 initial={{ y: -20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
@@ -279,12 +289,16 @@ export default function Dashboard() {
                     <h2 className="text-3xl font-bold text-gray-800 mb-6 border-b-2 border-indigo-100 pb-2">Live Readings & Status</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
 
+                        {/* 💡 SYSTEM STATUS CARD WITH BIG COLOR CHANGE */}
                         <StatCard
                             title="System Status"
                             value={sensorOn ? "ONLINE" : "OFFLINE"}
                             unit={null}
                             status={sensorOn ? (data ? "Data Received" : "Fetching Data") : "No Signal"}
+                            // Status tag color remains light for visibility
                             statusColorClass={sensorOn ? (data ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700") : "bg-red-100 text-red-700"}
+                            // 💡 PASSED DYNAMIC FULL BACKGROUND COLOR
+                            bgColorClass={systemStatusBgColor}
                             icon="🟢"
                         />
                         <StatCard

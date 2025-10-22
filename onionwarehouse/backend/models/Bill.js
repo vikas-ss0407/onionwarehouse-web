@@ -4,6 +4,8 @@ const billSchema = new mongoose.Schema({
   boxNumber: String,
   type: String,
   shopName: String,
+  shopAddress: String,
+  fssaiNumber: String,
   quantity: Number,
   costPrice: Number,
   sellingPrice: Number,

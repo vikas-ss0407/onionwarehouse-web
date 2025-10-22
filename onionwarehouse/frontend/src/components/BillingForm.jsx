@@ -25,10 +25,22 @@ export default function BillingForm({ boxes, shops, onAddBill }) {
       return;
     }
 
+    // Validate quantity against available stock
+    const available = selectedBoxObj?.quantity ?? 0;
+    const qtyNum = Number(quantity);
+    if (isNaN(qtyNum) || qtyNum <= 0) {
+      alert("Please enter a valid quantity (greater than 0).");
+      return;
+    }
+    if (qtyNum > available) {
+      alert(`Requested quantity (${qtyNum}kg) exceeds available stock (${available}kg).`);
+      return;
+    }
+
     onAddBill({
       boxId: selectedBox,
       shopId: selectedShop,
-      quantitySold: Number(quantity),
+      quantitySold: qtyNum,
       sellingPrice: Number(sellingPrice),
     });
 
@@ -81,10 +93,16 @@ export default function BillingForm({ boxes, shops, onAddBill }) {
           <label className="block text-gray-700 font-medium mb-1">Quantity (kg)</label>
           <input
             type="number"
+            min={1}
+            step={1}
+            max={selectedBoxObj?.quantity || undefined}
             value={quantity}
             onChange={(e) => setQuantity(e.target.value)}
             className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
+          {selectedBoxObj && quantity && Number(quantity) > selectedBoxObj.quantity && (
+            <p className="text-sm text-red-600 mt-1">Requested quantity exceeds available stock ({selectedBoxObj.quantity}kg).</p>
+          )}
         </div>
 
         <div>
@@ -108,7 +126,11 @@ export default function BillingForm({ boxes, shops, onAddBill }) {
         <div className="md:col-span-2">
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors"
+            className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={
+              !selectedBox || !selectedShop || !quantity || !sellingPrice ||
+              (selectedBoxObj && Number(quantity) > selectedBoxObj.quantity)
+            }
           >
             Generate Bill
           </button>
@@ -123,7 +145,6 @@ export default function BillingForm({ boxes, shops, onAddBill }) {
                 <th className="border p-2">Box Number</th>
                 <th className="border p-2">Type</th>
                 <th className="border p-2">Quantity (kg)</th>
-                <th className="border p-2">Cost per Kg (₹)</th>
                 <th className="border p-2">Selling Price (₹)</th>
                 <th className="border p-2">Shop</th>
                 <th className="border p-2">Total (₹)</th>
@@ -134,7 +155,6 @@ export default function BillingForm({ boxes, shops, onAddBill }) {
                 <td className="border p-2">{selectedBoxObj?.boxNumber}</td>
                 <td className="border p-2">{selectedBoxObj?.type}</td>
                 <td className="border p-2">{quantity}</td>
-                <td className="border p-2">{costPerKg}</td>
                 <td className="border p-2">{sellingPrice}</td>
                 <td className="border p-2">{selectedShopObj?.name}</td>
                 <td className="border p-2">{quantity * sellingPrice}</td>

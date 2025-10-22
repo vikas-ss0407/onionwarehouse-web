@@ -99,7 +99,7 @@ const galleryItems = [
     id: 1,
     title: "3D Bamboo Box Model",
     description:
-      "The proprietary storage crate design focusing on optimal airflow, drainage, and stable stacking for extended onion shelf life.",
+      "The proprietary storage crate design focusing on optimal airflow, and stable stacking for extended onion shelf life.",
     imagePath: "/images/bamboo box.jpeg", // PLACEHOLDER
     icon: Layers,
     color: "text-green-600", // Keep green for this item
@@ -108,7 +108,7 @@ const galleryItems = [
     id: 2,
     title: "IoT Hardware Setup",
     description:
-      "The prototype sensor cluster and connectivity unit, constantly monitoring environmentals like Temperature, Humidity, and Light (LDR).",
+      "The sensor and connectivity unit, constantly monitoring environmentals like Temperature, Humidity, and Light (LDR).",
     imagePath: "/images/hardwareproto.jpeg", // PLACEHOLDER
     icon: Cpu,
     color: NEW_BLUE_600, // Use custom blue for this item
@@ -224,93 +224,7 @@ const DesignGalleryModal = ({ isOpen, onClose }) => {
 };
 
 
-// --- New Modal Component (Contact Form) ---
-const ContactModal = ({ isOpen, onClose }) => {
-  if (!isOpen) return null;
-
-  // Animation variants for the modal appearance
-  const modalVariants = {
-    hidden: { y: "-100vh", opacity: 0 },
-    visible: { y: "0", opacity: 1, transition: { type: "spring", stiffness: 100, damping: 20 } },
-    exit: { y: "100vh", opacity: 0 },
-  };
-
-  return (
-    // Backdrop
-    <motion.div
-      className="fixed inset-0 z-[100] bg-black bg-opacity-70 flex items-center justify-center p-4"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-    >
-      {/* Modal Content */}
-      <motion.div
-        className="bg-white rounded-xl shadow-2xl w-full max-w-lg p-8 relative flex flex-col"
-        variants={modalVariants}
-        initial="hidden"
-        animate="visible"
-        exit="exit"
-      >
-        {/* Close Button */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-red-600 transition-colors duration-200 z-10 p-2 rounded-full bg-gray-100"
-        >
-          <X className="w-6 h-6" />
-        </button>
-
-        <h2 className="text-3xl font-extrabold text-gray-900 text-center mb-6 border-b pb-3">
-          Contact OnionGuard
-        </h2>
-        <p className="text-gray-600 text-center mb-6">
-          Tell us how we can help your business reduce losses.
-        </p>
-
-        {/* Form Fields */}
-        <form className="flex flex-col gap-4">
-          <input
-            type="text"
-            placeholder="Your Name / Company Name"
-            className="p-3 rounded-lg border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-opacity-70"
-            // Using style for focus ring color since tailwind dynamic color is complex
-            style={{ 
-                '--tw-ring-color': NEW_BLUE_500,
-                boxShadow: `0 0 0 3px rgba(37, 99, 235, 0.5)` // Custom shadow for focus
-            }}
-          />
-          <input
-            type="email"
-            placeholder="Email Address"
-            className="p-3 rounded-lg border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-opacity-70"
-             style={{ 
-                '--tw-ring-color': NEW_BLUE_500,
-                boxShadow: `0 0 0 3px rgba(37, 99, 235, 0.5)` 
-            }}
-          />
-          <textarea
-            placeholder="How can we help your business?"
-            className="p-3 rounded-lg border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-opacity-70"
-            rows={5}
-             style={{ 
-                '--tw-ring-color': NEW_BLUE_500,
-                boxShadow: `0 0 0 3px rgba(37, 99, 235, 0.5)` 
-            }}
-          />
-          {/* 🚀 CHANGED: Modal Button Color to match the primary blue theme */}
-          <button
-            type="submit"
-            className={`text-white px-8 py-3 rounded-full text-lg font-bold shadow-md transition-all duration-300 transform hover:scale-[1.02] mt-2`}
-            style={{ backgroundColor: ACCENT_COLOR_BASE }}
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = ACCENT_COLOR_HOVER}
-            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = ACCENT_COLOR_BASE}
-          >
-            Send Inquiry
-          </button>
-        </form>
-      </motion.div>
-    </motion.div>
-  );
-};
+// Contact modal removed per request (Contact form and trigger handled externally or removed)
 
 
 // --- Home Component ---
@@ -318,24 +232,15 @@ export default function Home() {
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState("home");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // 🚀 NEW STATE: for Contact Modal
-  const [isContactModalOpen, setIsContactModalOpen] = useState(false); 
   const [isNavSolid, setIsNavSolid] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  // 🚀 NEW HANDLERS for Contact Modal
-  const openContactModal = () => setIsContactModalOpen(true);
-  const closeContactModal = () => setIsContactModalOpen(false);
+  // Contact modal removed — no handlers needed
 
   const sectionIds = [
-    "home",
-    "bamboobox",
-    "advantage",
-    "features",
-    "workflow",
-    "contact",
+    "home","bamboobox","advantage","features","workflow","contact",
   ];
 
   useEffect(() => {
@@ -593,7 +498,7 @@ export default function Home() {
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = ACCENT_COLOR_BASE}
                 variants={itemVariants}
               >
-                Start Free Trial 🚀
+                Step Into Smart Storage 🚀
               </motion.button>
               <motion.button
                 onClick={() => scrollToSection("workflow")}
@@ -635,8 +540,7 @@ export default function Home() {
             transition={{ delay: 0.1 }}
             className="text-gray-600 text-xl leading-relaxed mb-12 max-w-4xl mx-auto"
           >
-            Explore the physical (3D Model, Hardware) and digital (UI Dashboard)
-            prototypes that form the core of the OnionGuard smart storage system.
+            Experience the seamless integration of hardware and software that makes OnionGuard unique. From live demo units to an intuitive UI dashboard, every component is engineered for optimal onion preservation.
           </motion.p>
 
           <motion.div
@@ -882,12 +786,11 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* Contact Section (REDUCED SPACING) */}
+      {/* Contact Section (restored without Request button) */}
       <section
         id="contact"
-        // Retaining py-16 from the first update (or just slightly less than original py-24)
         className={`py-16 text-white text-center px-6`} 
-        style={{ backgroundColor: NEW_BLUE_700 }} 
+        style={{ backgroundColor: NEW_BLUE_700 }}
       >
         <motion.div
           initial="hidden"
@@ -898,50 +801,30 @@ export default function Home() {
         >
           <motion.h2
             variants={textVariants}
-            // 🚀 CHANGED: Reduced margin from mb-6 to mb-4
-            className="text-4xl font-extrabold mb-4" 
+            className="text-4xl font-extrabold mb-4"
           >
             Ready to Reduce Your Loss?
           </motion.h2>
           <motion.p
             variants={textVariants}
             transition={{ delay: 0.1 }}
-            // 🚀 CHANGED: Reduced margin from mb-10 to mb-6
             className={`text-xl leading-relaxed mb-6`}
-            style={{ color: NEW_BLUE_200 }} 
+            style={{ color: NEW_BLUE_200 }}
           >
             Contact us today to integrate OnionGuard's smart monitoring into your
             warehouse operations.
           </motion.p>
-          
-          {/* Button */}
-          <motion.button
-            onClick={openContactModal} 
-            // 🚀 UPDATED: Text is 'Request a Demo' and color is Amber/Yellow
-            className={`text-gray-900 px-12 py-4 rounded-full text-lg font-bold shadow-2xl transition-all duration-300 transform hover:scale-105 mt-2`}
-            style={{ backgroundColor: CTA_AMBER_BASE }}
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = CTA_AMBER_HOVER}
-            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = CTA_AMBER_BASE}
-            variants={itemVariants}
-          >
-            Request a Demo 💡
-          </motion.button>
-          
-          <motion.div 
-            // 🚀 CHANGED: Reduced margin from mt-12 to mt-8
-            className="mt-8 text-lg space-y-1" 
-          >
-            {/* 🚀 CHANGED: Reduced space-y from 2 to 1 */}
+
+          <motion.div className="mt-8 text-lg space-y-1">
             <motion.p variants={textVariants} style={{ color: NEW_BLUE_300 }}>
               <span className="font-bold">📧</span> support@onionguard.com
             </motion.p>
             <motion.p variants={textVariants} style={{ color: NEW_BLUE_300 }}>
               <span className="font-bold">📞</span> +91 98765 43210
             </motion.p>
-            <motion.p 
-              variants={textVariants} 
-              // 🚀 CHANGED: Reduced margin from mt-6 to mt-4
-              className={`mt-4 text-sm`} 
+            <motion.p
+              variants={textVariants}
+              className={`mt-4 text-sm`}
               style={{ color: NEW_BLUE_400 }}
             >
               © 2025 OnionGuard | Developed by Vikas S S
@@ -954,10 +837,6 @@ export default function Home() {
       <AnimatePresence>
         {isModalOpen && (
           <DesignGalleryModal isOpen={isModalOpen} onClose={closeModal} />
-        )}
-        {/* 🚀 NEW MODAL: Contact Form */}
-        {isContactModalOpen && (
-          <ContactModal isOpen={isContactModalOpen} onClose={closeContactModal} />
         )}
       </AnimatePresence>
     </div>

@@ -43,30 +43,7 @@ export default function Billing() {
         <BillingForm boxes={boxes} shops={shops} onAddBill={handleAddBill} />
       </div>
 
-      {/* Preview Section */}
-      <div className="bg-white shadow-md rounded-lg p-6">
-        <h3 className="text-xl font-semibold mb-4 text-center text-gray-700">Preview</h3>
-        {boxes.length === 0 || shops.length === 0 ? (
-          <p className="text-gray-500">Select a box and a shop to preview the bill.</p>
-        ) : (
-          <table className="w-full border-collapse border text-left">
-            <thead className="bg-gray-100 text-gray-700">
-              <tr>
-                <th className="border p-2">Box Number</th>
-                <th className="border p-2">Type</th>
-                <th className="border p-2">Quantity (kg)</th>
-                <th className="border p-2">Cost per Kg (₹)</th>
-                <th className="border p-2">Selling Price (₹)</th>
-                <th className="border p-2">Shop</th>
-                <th className="border p-2">Total (₹)</th>
-              </tr>
-            </thead>
-            <tbody>
-              {/* The BillingForm component will handle preview table dynamically */}
-            </tbody>
-          </table>
-        )}
-      </div>
+      {/* Preview is handled inside the BillingForm component to avoid duplication. */}
     </div>
   );
 }

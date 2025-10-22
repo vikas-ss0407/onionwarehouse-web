@@ -51,7 +51,7 @@ export default function Signup() {
 
       if (res.user) {
         alert("Account created successfully ✅");
-        navigate("/"); 
+        navigate("/"); // Navigate to the login page (or wherever the main route is)
       } else {
         alert(res.message || "Signup failed");
       }
@@ -98,54 +98,72 @@ export default function Signup() {
           type="text"
           name="name"
           placeholder="Name"
-          className="w-full p-3 mb-4 border rounded text-lg"
+          className="w-full p-3 mb-4 border rounded text-lg focus:border-blue-500 focus:ring-blue-500"
           value={form.name}
           onChange={handleChange}
+          required
         />
         <input
           type="email"
           name="email"
           placeholder="Email"
-          className="w-full p-3 mb-4 border rounded text-lg"
+          className="w-full p-3 mb-4 border rounded text-lg focus:border-blue-500 focus:ring-blue-500"
           value={form.email}
           onChange={handleChange}
+          required
         />
         <input
-          type="text"
+          type="tel" // Changed to tel for semantic correctness
           name="phone"
           placeholder="Phone Number"
-          className="w-full p-3 mb-4 border rounded text-lg"
+          className="w-full p-3 mb-4 border rounded text-lg focus:border-blue-500 focus:ring-blue-500"
           value={form.phone}
           onChange={handleChange}
+          required
         />
         <input
           type="password"
           name="password"
           placeholder="Password"
-          className="w-full p-3 mb-4 border rounded text-lg"
+          className="w-full p-3 mb-4 border rounded text-lg focus:border-blue-500 focus:ring-blue-500"
           value={form.password}
           onChange={handleChange}
+          required
         />
         <input
           type="password"
           name="confirmPassword"
           placeholder="Confirm Password"
-          className="w-full p-3 mb-4 border rounded text-lg"
+          className="w-full p-3 mb-6 border rounded text-lg focus:border-blue-500 focus:ring-blue-500"
           value={form.confirmPassword}
           onChange={handleChange}
+          required
         />
         <button
           type="submit"
-          className="w-full bg-blue-700 text-white p-3 rounded-lg hover:bg-blue-800 mb-4 text-lg"
+          className="w-full bg-blue-700 text-white p-3 rounded-lg hover:bg-blue-800 mb-4 text-lg transition duration-200"
         >
           Signup
         </button>
+        
+        {/* Added "Already have an account? Login" button */}
+        <p className="text-center mb-4 text-gray-600">
+          Already have an account?{" "}
+          <button
+            type="button"
+            onClick={() => navigate("/")} // Assuming '/' is your login page
+            className="text-blue-700 font-semibold hover:text-blue-800 focus:outline-none"
+          >
+            Login
+          </button>
+        </p>
+
         <button
           type="button"
           onClick={() => navigate(-1)}
-          className="w-full bg-gray-300 text-black p-3 rounded-lg hover:bg-gray-400 text-lg"
+          className="w-full bg-gray-200 text-gray-700 p-3 rounded-lg hover:bg-gray-300 text-lg transition duration-200"
         >
-          ← Back
+          ← Go Back
         </button>
       </form>
     </div>

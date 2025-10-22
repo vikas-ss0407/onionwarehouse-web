@@ -8,10 +8,12 @@ import Navbar from "./components/Navbar";
 
 import ManageShops from "./pages/ManageShops";
 import ManageBoxes from "./pages/ManageBoxes"; 
-import AddBox from "./pages/AddBox";          // ✅ import AddBox
+import AddBox from "./pages/AddBox";
 import Billing from "./pages/Billing";
 import PrintBill from "./pages/PrintBill";
 import ManageSensors from "./pages/ManageSensors";
+
+import ProtectedRoute from "./components/ProtectedRoute"; // ✅ import ProtectedRoute
 
 export default function App() {
   const location = useLocation();
@@ -19,7 +21,7 @@ export default function App() {
     location.pathname.startsWith("/dashboard") ||
     location.pathname.startsWith("/manage-shops") ||
     location.pathname.startsWith("/manage-boxes") || 
-    location.pathname.startsWith("/addbox") ||       // ✅ show navbar on AddBox page
+    location.pathname.startsWith("/addbox") ||
     location.pathname.startsWith("/billing") ||
     location.pathname.startsWith("/print-bill") ||
     location.pathname.startsWith("/manage-sensors");
@@ -28,17 +30,76 @@ export default function App() {
     <div className="min-h-screen bg-gray-100">
       {showNavbar && <Navbar />}
       <Routes>
+        {/* Public Routes */}
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/manage-shops" element={<ManageShops />} />
-        <Route path="/manage-boxes" element={<ManageBoxes />} />
-        <Route path="/addbox" element={<AddBox />} />   {/* ✅ AddBox route */}
-        <Route path="/billing" element={<Billing />} />
-        <Route path="/print-bill" element={<PrintBill />} />
-        <Route path="/manage-sensors" element={<ManageSensors />} />
+
+        {/* Protected Routes */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/manage-shops"
+          element={
+            <ProtectedRoute>
+              <ManageShops />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/manage-boxes"
+          element={
+            <ProtectedRoute>
+              <ManageBoxes />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/addbox"
+          element={
+            <ProtectedRoute>
+              <AddBox />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/billing"
+          element={
+            <ProtectedRoute>
+              <Billing />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/print-bill"
+          element={
+            <ProtectedRoute>
+              <PrintBill />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/manage-sensors"
+          element={
+            <ProtectedRoute>
+              <ManageSensors />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </div>
   );
