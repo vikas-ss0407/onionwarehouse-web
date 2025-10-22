@@ -109,9 +109,9 @@ const galleryItems = [
     title: "IoT Hardware Setup",
     description:
       "The sensor and connectivity unit, constantly monitoring environmentals like Temperature, Humidity, and Light (LDR).",
-    imagePath: "/images/hardwareproto.jpeg", // PLACEHOLDER
+    imagePath: "/images/storage.png", // PLACEHOLDER
     icon: Cpu,
-    color: NEW_BLUE_600, // Use custom blue for this item
+    color: NEW_BLUE_600, 
   },
   {
     id: 3,
@@ -685,7 +685,7 @@ export default function Home() {
               <motion.div
                 key={index}
                 variants={itemVariants}
-                
+
                 whileHover={{
                   scale: 1.05,
                   boxShadow: "0px 15px 30px rgba(0,0,0,0.1)", // Consistent shadow on lift
