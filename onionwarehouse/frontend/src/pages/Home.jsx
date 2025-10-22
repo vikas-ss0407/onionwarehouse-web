@@ -685,7 +685,7 @@ export default function Home() {
               <motion.div
                 key={index}
                 variants={itemVariants}
-                // 🚀 CHANGED: Applied workflow-style hover for subtle lift and blue background
+                
                 whileHover={{
                   scale: 1.05,
                   boxShadow: "0px 15px 30px rgba(0,0,0,0.1)", // Consistent shadow on lift
