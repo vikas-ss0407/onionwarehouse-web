@@ -24,7 +24,7 @@ exports.fetchAndSaveLatest = async (req, res) => {
 
     // Sensor ON check: reading within last 5 minutes
     const now = new Date();
-    const DIFF_MINUTES = 5;
+    const DIFF_MINUTES = 2;
     const isSensorOn = now - createdAt <= DIFF_MINUTES * 60 * 1000;
 
     if (!isSensorOn) {
